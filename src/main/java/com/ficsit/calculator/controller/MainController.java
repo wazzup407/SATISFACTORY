@@ -1,4 +1,9 @@
-package controller;
+package com.ficsit.calculator.controller;
+
+import com.ficsit.calculator.model.FactoryEngine;
+import com.ficsit.calculator.model.FactoryEngine.CalculationResult;
+import com.ficsit.calculator.model.FactoryEngine.Edge;
+import com.ficsit.calculator.model.FactoryEngine.NodeData;
 
 import guru.nidi.graphviz.engine.Format;
 import guru.nidi.graphviz.engine.Graphviz;

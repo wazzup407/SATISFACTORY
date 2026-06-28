@@ -6,7 +6,7 @@ import javafx.scene.image.ImageView?>
 import javafx.scene.layout.*?>
 
 <BorderPane xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml" 
-            fx:controller="controller.MainController" 
+            fx:controller="com.ficsit.calculator.controller.MainController" 
             prefWidth="1100" prefHeight="750">
 
     <left>

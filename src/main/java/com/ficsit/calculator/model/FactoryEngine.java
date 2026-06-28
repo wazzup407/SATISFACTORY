@@ -1,4 +1,4 @@
-package model;
+package com.ficsit.calculator.model;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
