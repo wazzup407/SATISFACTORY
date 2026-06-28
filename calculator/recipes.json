@@ -1,0 +1,301 @@
+{
+    "iron_ore": {
+        "output_qty": 1,
+        "name": "Ruda Żelaza"
+    },
+    "copper_ore": {
+        "output_qty": 1,
+        "name": "Ruda Miedzi"
+    },
+    "coal": {
+        "output_qty": 1,
+        "name": "Węgiel"
+    },
+    "limestone": {
+        "output_qty": 1,
+        "name": "Wapień"
+    },
+    "raw_quartz": {
+        "output_qty": 1,
+        "name": "Surowy Kwarzec"
+    },
+    "caterium_ore": {
+        "output_qty": 1,
+        "name": "Ruda Katerium"
+    },
+    "iron_ingot": {
+        "inputs": {
+            "iron_ore": 30
+        },
+        "output_qty": 30,
+        "machine": "Huta",
+        "name": "Sztabki Żelaza"
+    },
+    "copper_ingot": {
+        "inputs": {
+            "copper_ore": 30
+        },
+        "output_qty": 30,
+        "machine": "Huta",
+        "name": "Sztabki Miedzi"
+    },
+    "steel_ingot": {
+        "inputs": {
+            "iron_ore": 45,
+            "coal": 45
+        },
+        "output_qty": 45,
+        "machine": "Odlewnia",
+        "name": "Stal"
+    },
+    "caterium_ingot": {
+        "inputs": {
+            "caterium_ore": 45
+        },
+        "output_qty": 15,
+        "machine": "Huta",
+        "name": "Sztabki Katerium"
+    },
+    "iron_plate": {
+        "inputs": {
+            "iron_ingot": 30
+        },
+        "output_qty": 20,
+        "machine": "Konstruktor",
+        "name": "Żelazne Płyty"
+    },
+    "iron_rod": {
+        "inputs": {
+            "iron_ingot": 15
+        },
+        "output_qty": 15,
+        "machine": "Konstruktor",
+        "name": "Żelazne Pręty"
+    },
+    "wire": {
+        "inputs": {
+            "copper_ingot": 15
+        },
+        "output_qty": 30,
+        "machine": "Konstruktor",
+        "name": "Przewody"
+    },
+    "cable": {
+        "inputs": {
+            "wire": 60
+        },
+        "output_qty": 30,
+        "machine": "Konstruktor",
+        "name": "Kable"
+    },
+    "screw": {
+        "inputs": {
+            "iron_rod": 10
+        },
+        "output_qty": 40,
+        "machine": "Konstruktor",
+        "name": "Śruby"
+    },
+    "concrete": {
+        "inputs": {
+            "limestone": 45
+        },
+        "output_qty": 15,
+        "machine": "Konstruktor",
+        "name": "Beton"
+    },
+    "quartz_crystal": {
+        "inputs": {
+            "raw_quartz": 37.5
+        },
+        "output_qty": 22.5,
+        "machine": "Konstruktor",
+        "name": "Kryształy Krzemu"
+    },
+    "silica": {
+        "inputs": {
+            "raw_quartz": 22.5
+        },
+        "output_qty": 37.5,
+        "machine": "Konstruktor",
+        "name": "Krzemionka"
+    },
+    "copper_sheet": {
+        "inputs": {
+            "copper_ingot": 20
+        },
+        "output_qty": 10,
+        "machine": "Konstruktor",
+        "name": "Blacha Miedziana"
+    },
+    "quickwire": {
+        "inputs": {
+            "caterium_ingot": 12
+        },
+        "output_qty": 60,
+        "machine": "Konstruktor",
+        "name": "Kabel Katerium"
+    },
+    "reinforced_iron_plate": {
+        "inputs": {
+            "iron_plate": 30,
+            "screw": 60
+        },
+        "output_qty": 5,
+        "machine": "Montażysta",
+        "name": "Wzmocnione Płyty"
+    },
+    "rotor": {
+        "inputs": {
+            "iron_rod": 20,
+            "screw": 100
+        },
+        "output_qty": 4,
+        "machine": "Montażysta",
+        "name": "Wirniki"
+    },
+    "modular_frame": {
+        "inputs": {
+            "reinforced_iron_plate": 3,
+            "iron_rod": 12
+        },
+        "output_qty": 2,
+        "machine": "Montażysta",
+        "name": "Ramy Modułowe"
+    },
+    "modular_frame_alt": {
+        "inputs": {
+            "reinforced_iron_plate": 2,
+            "steel_pipe": 10
+        },
+        "output_qty": 3,
+        "machine": "Montażysta",
+        "name": "Ramy Mod. (Alt)"
+    },
+    "steel_pipe": {
+        "inputs": {
+            "steel_ingot": 30
+        },
+        "output_qty": 20,
+        "machine": "Konstruktor",
+        "name": "Stalowe Rury"
+    },
+    "steel_beam": {
+        "inputs": {
+            "steel_ingot": 60
+        },
+        "output_qty": 15,
+        "machine": "Konstruktor",
+        "name": "Stalowe Belki"
+    },
+    "encased_industrial_beam": {
+        "inputs": {
+            "steel_beam": 18,
+            "concrete": 36
+        },
+        "output_qty": 6,
+        "machine": "Montażysta",
+        "name": "Żelbetony"
+    },
+    "encased_industrial_beam_alt": {
+        "inputs": {
+            "steel_pipe": 24,
+            "concrete": 20
+        },
+        "output_qty": 4,
+        "machine": "Montażysta",
+        "name": "Żelbetony (Alt)"
+    },
+    "stator": {
+        "inputs": {
+            "steel_pipe": 15,
+            "wire": 40
+        },
+        "output_qty": 5,
+        "machine": "Montażysta",
+        "name": "Stojany"
+    },
+    "motor": {
+        "inputs": {
+            "rotor": 10,
+            "stator": 10
+        },
+        "output_qty": 5,
+        "machine": "Montażysta",
+        "name": "Silniki"
+    },
+    "ai_limiter": {
+        "inputs": {
+            "copper_sheet": 25,
+            "quickwire": 100
+        },
+        "output_qty": 5,
+        "machine": "Montażysta",
+        "name": "Ogranicznik AI (DMO)"
+    },
+    "em_control_rod": {
+        "inputs": {
+            "stator": 3,
+            "ai_limiter": 2
+        },
+        "output_qty": 1,
+        "machine": "Montażysta",
+        "name": "Fluktuatory"
+    },
+    "crystal_oscillator": {
+        "inputs": {
+            "quartz_crystal": 18,
+            "cable": 14,
+            "reinforced_iron_plate": 2.5
+        },
+        "output_qty": 1,
+        "machine": "Producent",
+        "name": "Oscylatory"
+    },
+    "smart_plating": {
+        "inputs": {
+            "reinforced_iron_plate": 2,
+            "rotor": 2
+        },
+        "output_qty": 2,
+        "machine": "Montażysta",
+        "name": "Inteligentne Poszycie"
+    },
+    "versatile_framework": {
+        "inputs": {"modular_frame": 2.5, "steel_beam": 30}, 
+        "output_qty": 5, 
+        "machine": "Montażysta", 
+        "name": "Kratownice"
+    },
+    "automated_wiring": {
+        "inputs": {
+            "stator": 2.5,
+            "cable": 50
+        },
+        "output_qty": 2.5,
+        "machine": "Montażysta",
+        "name": "Aut. Okablowanie"
+    },
+    "sam_ore": {
+        "output_qty": 1, 
+        "name": "Ruda DMO"
+    },
+    "reanimated_sam": {
+        "inputs": {
+            "sam_ore": 120
+        }, 
+        "output_qty": 30, 
+        "machine": "Konstruktor", 
+        "name": "Ożywione DMO"
+    },
+    "sam_fluctuator": {
+        "inputs": {
+            "reanimated_sam": 60, 
+            "wire": 50, 
+            "steel_pipe": 30
+        }, 
+        "output_qty": 10, 
+        "machine": "Producent", 
+        "name": "Fluktuator DMO"
+    }
+}
