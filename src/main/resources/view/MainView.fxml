@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+import javafx.geometry.Insets?>
+import javafx.scene.control.*?>
+import javafx.scene.image.ImageView?>
+import javafx.scene.layout.*?>
+
+<BorderPane xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml" 
+            fx:controller="controller.MainController" 
+            prefWidth="1100" prefHeight="750">
+
+    <left>
+        <VBox spacing="10" style="-fx-background-color: #f4f4f4; -fx-border-color: #cccccc; -fx-border-width: 0 1 0 0;">
+            <padding><Insets top="20" right="20" bottom="20" left="20"/></padding>
+            
+            <Label text="TERMINAL PLANOWANIA FICSIT" style="-fx-font-size: 16px; -fx-font-weight: bold; -fx-text-fill: #e67e22;"/>
+            <Separator />
+
+            <Label text="1. Co chcemy wyprodukować?" style="-fx-font-weight: bold;"/>
+            <Label text="(Format -> klucz:ilość. Każdy w nowej linii)" style="-fx-font-size: 10px; -fx-text-fill: gray;"/>
+            <TextArea fx:id="demandsArea" promptText="np.&#10;motor:5&#10;crystal_oscillator:2" prefHeight="120" prefWidth="250"/>
+            
+            <Label text="2. Gotowe zasilanie z zewnątrz?" style="-fx-font-weight: bold;">
+                <VBox.margin><Insets top="10"/></VBox.margin>
+            </Label>
+            <Label text="(Format -> klucz:ilość. Każdy w nowej linii)" style="-fx-font-size: 10px; -fx-text-fill: gray;"/>
+            <TextArea fx:id="providedArea" promptText="np.&#10;wire:100&#10;steel_pipe:30" prefHeight="120" prefWidth="250"/>
+            
+            <Label text="3. Półprodukty do magazynu" style="-fx-font-weight: bold;">
+                <VBox.margin><Insets top="10"/></VBox.margin>
+            </Label>
+            <Label text="(Klucze po przecinku)" style="-fx-font-size: 10px; -fx-text-fill: gray;"/>
+            <TextField fx:id="surplusField" promptText="np. wire, iron_plate, rotor"/>
+            
+            <Region VBox.vgrow="ALWAYS"/>
+            
+            <Button fx:id="generateBtn" text="ANALIZUJ I GENERUJ" onAction="#handleGenerate" 
+                    prefWidth="MAX_VALUE" 
+                    style="-fx-background-color: #e67e22; -fx-text-fill: white; -fx-font-weight: bold; -fx-padding: 12px; -fx-cursor: hand;"/>
+                    
+            <Label fx:id="statusLabel" text="Oczekuje na dane wprowadzające..." style="-fx-text-fill: #7f8c8d; -fx-font-size: 11px;"/>
+        </VBox>
+    </left>
+
+    <center>
+        <ScrollPane fitToWidth="true" fitToHeight="true" style="-fx-background-color: #ffffff;">
+            <StackPane style="-fx-background-color: #ffffff;">
+                <ImageView fx:id="graphImageView" preserveRatio="true"/>
+            </StackPane>
+        </ScrollPane>
+    </center>
+
+</BorderPane>
