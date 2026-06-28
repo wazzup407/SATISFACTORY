@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-import javafx.geometry.Insets?>
-import javafx.scene.control.*?>
-import javafx.scene.image.ImageView?>
-import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.image.ImageView?>
 
-<BorderPane xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml" 
+<BorderPane xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" 
             fx:controller="com.ficsit.calculator.controller.MainController" 
             prefWidth="1100" prefHeight="750">
 
@@ -17,37 +17,28 @@ import javafx.scene.layout.*?>
             <Separator />
 
             <Label text="1. Co chcemy wyprodukować?" style="-fx-font-weight: bold;"/>
-            <Label text="(Format -> klucz:ilość. Każdy w nowej linii)" style="-fx-font-size: 10px; -fx-text-fill: gray;"/>
-            <TextArea fx:id="demandsArea" promptText="np.&#10;motor:5&#10;crystal_oscillator:2" prefHeight="120" prefWidth="250"/>
+            <TextArea fx:id="demandsArea" promptText="motor:5&#10;crystal_oscillator:2" prefHeight="120" prefWidth="250"/>
             
-            <Label text="2. Gotowe zasilanie z zewnątrz?" style="-fx-font-weight: bold;">
-                <VBox.margin><Insets top="10"/></VBox.margin>
-            </Label>
-            <Label text="(Format -> klucz:ilość. Każdy w nowej linii)" style="-fx-font-size: 10px; -fx-text-fill: gray;"/>
-            <TextArea fx:id="providedArea" promptText="np.&#10;wire:100&#10;steel_pipe:30" prefHeight="120" prefWidth="250"/>
+            <Label text="2. Gotowe zasilanie (z zewnątrz)?" style="-fx-font-weight: bold;"/>
+            <TextArea fx:id="providedArea" promptText="wire:100" prefHeight="120" prefWidth="250"/>
             
-            <Label text="3. Półprodukty do magazynu" style="-fx-font-weight: bold;">
-                <VBox.margin><Insets top="10"/></VBox.margin>
-            </Label>
-            <Label text="(Klucze po przecinku)" style="-fx-font-size: 10px; -fx-text-fill: gray;"/>
-            <TextField fx:id="surplusField" promptText="np. wire, iron_plate, rotor"/>
+            <Label text="3. Półprodukty do magazynu" style="-fx-font-weight: bold;"/>
+            <TextField fx:id="surplusField" promptText="wire, iron_plate"/>
             
             <Region VBox.vgrow="ALWAYS"/>
             
             <Button fx:id="generateBtn" text="ANALIZUJ I GENERUJ" onAction="#handleGenerate" 
-                    prefWidth="MAX_VALUE" 
-                    style="-fx-background-color: #e67e22; -fx-text-fill: white; -fx-font-weight: bold; -fx-padding: 12px; -fx-cursor: hand;"/>
+                    prefWidth="250" style="-fx-background-color: #e67e22; -fx-text-fill: white; -fx-font-weight: bold;"/>
                     
-            <Label fx:id="statusLabel" text="Oczekuje na dane wprowadzające..." style="-fx-text-fill: #7f8c8d; -fx-font-size: 11px;"/>
+            <Label fx:id="statusLabel" text="Oczekuje na dane..." style="-fx-text-fill: #7f8c8d;"/>
         </VBox>
     </left>
 
     <center>
-        <ScrollPane fitToWidth="true" fitToHeight="true" style="-fx-background-color: #ffffff;">
+        <ScrollPane fitToWidth="true" fitToHeight="true">
             <StackPane style="-fx-background-color: #ffffff;">
                 <ImageView fx:id="graphImageView" preserveRatio="true"/>
             </StackPane>
         </ScrollPane>
     </center>
-
 </BorderPane>
