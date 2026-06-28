@@ -16,10 +16,6 @@ import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import model.FactoryEngine;
-import model.FactoryEngine.CalculationResult;
-import model.FactoryEngine.Edge;
-import model.FactoryEngine.NodeData;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;

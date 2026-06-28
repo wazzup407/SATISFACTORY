@@ -1,4 +1,4 @@
-package main.java.com.ficsit.calculator;
+package com.ficsit.calculator;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
