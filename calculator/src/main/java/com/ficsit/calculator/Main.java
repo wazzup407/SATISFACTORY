@@ -1,4 +1,5 @@
 package com.ficsit.calculator;
+
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -9,10 +10,10 @@ public class Main extends Application {
 
     @Override
     public void start(Stage primaryStage) throws Exception {
-        // Upewnij się, że ścieżka do FXML jest poprawna dla Twojej struktury katalogów!
+        // Ścieżka do widoku - upewnij się, że MainView.fxml jest w src/main/resources/view/
         Parent root = FXMLLoader.load(getClass().getResource("/view/MainView.fxml"));
-        primaryStage.setTitle("Kalkulator Satisfactory");
-        primaryStage.setScene(new Scene(root, 1100, 750));
+        primaryStage.setTitle("Terminal FICSIT");
+        primaryStage.setScene(new Scene(root, 1150, 780));
         primaryStage.show();
     }
 

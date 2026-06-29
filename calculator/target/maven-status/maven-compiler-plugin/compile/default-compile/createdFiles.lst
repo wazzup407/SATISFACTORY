@@ -1,0 +1,9 @@
+com\ficsit\calculator\AppLauncher.class
+com\ficsit\calculator\model\FactoryEngine$1.class
+com\ficsit\calculator\model\FactoryEngine$CalculationResult.class
+com\ficsit\calculator\model\FactoryEngine.class
+com\ficsit\calculator\model\FactoryEngine$NodeData.class
+com\ficsit\calculator\controller\MainController.class
+com\ficsit\calculator\model\FactoryEngine$Edge.class
+com\ficsit\calculator\Main.class
+com\ficsit\calculator\model\Recipe.class

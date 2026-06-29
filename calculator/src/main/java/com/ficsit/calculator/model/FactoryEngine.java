@@ -141,8 +141,6 @@ public class FactoryEngine {
                 if (frac > 0.001) newMachines = full + 1;
             } else if (isFinal) {
                 if (frac > 0.25 && full >= 1.0) newMachines = full + 1;
-            } else {
-                if (frac >= 0.75) newMachines = full + 1;
             }
 
             double actualAmount = newMachines * recipe.outputQty;

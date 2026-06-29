@@ -7,28 +7,52 @@
 
 <BorderPane xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" 
             fx:controller="com.ficsit.calculator.controller.MainController" 
-            prefWidth="1100" prefHeight="750">
+            prefWidth="1200" prefHeight="800">
 
     <left>
-        <VBox spacing="10" style="-fx-background-color: #f4f4f4; -fx-border-color: #cccccc; -fx-border-width: 0 1 0 0;">
-            <padding><Insets top="20" right="20" bottom="20" left="20"/></padding>
+        <VBox spacing="8" style="-fx-background-color: #f4f4f4; -fx-border-color: #cccccc; -fx-border-width: 0 1 0 0;" prefWidth="350">
+            <padding><Insets top="15" right="15" bottom="15" left="15"/></padding>
             
             <Label text="TERMINAL PLANOWANIA FICSIT" style="-fx-font-size: 16px; -fx-font-weight: bold; -fx-text-fill: #e67e22;"/>
             <Separator />
 
             <Label text="1. Co chcemy wyprodukować?" style="-fx-font-weight: bold;"/>
-            <TextArea fx:id="demandsArea" promptText="motor:5&#10;crystal_oscillator:2" prefHeight="120" prefWidth="250"/>
+            <ListView fx:id="demandsList" prefHeight="85"/>
+            <HBox spacing="5">
+                <ComboBox fx:id="demandsCombo" promptText="Wybierz..." HBox.hgrow="ALWAYS" maxWidth="Infinity"/>
+                <TextField fx:id="demandsQty" promptText="Ilość" prefWidth="60"/>
+                <Button text="+" onAction="#addDemand" style="-fx-font-weight: bold;"/>
+            </HBox>
+            <Button text="Wyczyść zadania" onAction="#clearDemands" style="-fx-font-size: 10px;"/>
             
-            <Label text="2. Gotowe zasilanie (z zewnątrz)?" style="-fx-font-weight: bold;"/>
-            <TextArea fx:id="providedArea" promptText="wire:100" prefHeight="120" prefWidth="250"/>
+            <Label text="2. Gotowe zasilanie z zewnątrz?" style="-fx-font-weight: bold;">
+                <VBox.margin><Insets top="5"/></VBox.margin>
+            </Label>
+            <ListView fx:id="providedList" prefHeight="85"/>
+            <HBox spacing="5">
+                <ComboBox fx:id="providedCombo" promptText="Wybierz..." HBox.hgrow="ALWAYS" maxWidth="Infinity"/>
+                <TextField fx:id="providedQty" promptText="Ilość" prefWidth="60"/>
+                <Button text="+" onAction="#addProvided" style="-fx-font-weight: bold;"/>
+            </HBox>
+            <Button text="Wyczyść zasilanie" onAction="#clearProvided" style="-fx-font-size: 10px;"/>
             
-            <Label text="3. Półprodukty do magazynu" style="-fx-font-weight: bold;"/>
-            <TextField fx:id="surplusField" promptText="wire, iron_plate"/>
+            <Label text="3. Półprodukty do magazynu" style="-fx-font-weight: bold;">
+                <VBox.margin><Insets top="5"/></VBox.margin>
+            </Label>
+            <ListView fx:id="surplusList" prefHeight="85"/>
+            <HBox spacing="5">
+                <ComboBox fx:id="surplusCombo" promptText="Wybierz przedmiot do nadwyżki..." HBox.hgrow="ALWAYS" maxWidth="Infinity"/>
+                <Button text="+" onAction="#addSurplus" style="-fx-font-weight: bold;" prefWidth="30"/>
+            </HBox>
+            <Button text="Wyczyść magazyn" onAction="#clearSurplus" style="-fx-font-size: 10px;"/>
             
             <Region VBox.vgrow="ALWAYS"/>
             
             <Button fx:id="generateBtn" text="ANALIZUJ I GENERUJ" onAction="#handleGenerate" 
-                    prefWidth="250" style="-fx-background-color: #e67e22; -fx-text-fill: white; -fx-font-weight: bold;"/>
+                    maxWidth="Infinity" style="-fx-background-color: #e67e22; -fx-text-fill: white; -fx-font-weight: bold; -fx-padding: 8px;"/>
+            
+            <Button text="ZAPISZ GRAF JAKO OBRAZEK" onAction="#saveGraph" 
+                    maxWidth="Infinity" style="-fx-background-color: #34495e; -fx-text-fill: white; -fx-font-weight: bold; -fx-padding: 8px;"/>
                     
             <Label fx:id="statusLabel" text="Oczekuje na dane..." style="-fx-text-fill: #7f8c8d;"/>
         </VBox>
