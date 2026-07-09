@@ -9,15 +9,6 @@ import java.util.*;
 public class FactoryEngine {
 
     public Map<String, Recipe> recipesDB;
-    
-    // Baza prądowa FICSIT
-    private static final Map<String, Double> MACHINE_POWER = Map.of(
-            "Konstruktor", 4.0,
-            "Montażysta", 15.0,
-            "Producent", 55.0,
-            "Huta", 4.0,
-            "Odlewnia", 16.0
-    );
 
     // --- KLASY ZWRACANE (WYNIKOWE) ---
     public static class Edge {
@@ -56,10 +47,49 @@ public class FactoryEngine {
     }
 
     public String getName(String key) {
-        if (recipesDB.containsKey(key) && recipesDB.get(key).name != null) {
-            return recipesDB.get(key).name;
+        switch (key) {
+            case "iron_ore": return "Ruda Żelaza";
+            case "copper_ore": return "Ruda Miedzi";
+            case "limestone": return "Wapień";
+            case "coal": return "Węgiel";
+            case "crude_oil": return "Ropa Naftowa";
+            case "sam_ore": return "Ruda DMO";
+            case "raw_quartz": return "Surowy Kwarzec";
+            case "iron_ingot": return "Sztabka Żelaza";
+            case "copper_ingot": return "Sztabka Miedzi";
+            case "steel_ingot": return "Sztabka Stali";
+            case "iron_plate": return "Żelazna Płyta";
+            case "iron_rod": return "Żelazny Pręt";
+            case "wire": return "Drut";
+            case "cable": return "Przewód";
+            case "concrete": return "Beton";
+            case "screw": return "Śruba";
+            case "reinforced_plate": return "Wzmocniona Płyta";
+            case "rotor": return "Wirnik";
+            case "stator": return "Stojan";
+            case "motor": return "Silnik";
+            case "modular_frame": return "Rama Modułowa";
+            case "smart_plating": return "Inteligentna Powłoka";
+            case "copper_sheet": return "Blacha Miedziana";
+            case "steel_beam": return "Belka Stalowa";
+            case "steel_pipe": return "Rura Stalowa";
+            case "encased_beam": return "Wzmocniona Belka Przemysłowa";
+            case "plastic": return "Plastik";
+            case "rubber": return "Guma";
+            case "fuel": return "Paliwo";
+            case "circuit_board": return "Płytka Drukowana";
+            case "computer": return "Komputer";
+            case "heavy_frame": return "Ciężka Rama Modułowa";
+            case "versatile_framework": return "Wszechstronna Rama";
+            case "modular_engine": return "Silnik Modułowy";
+            case "adaptive_unit": return "Adaptacyjna Jednostka Sterująca";
+            case "automated_wiring": return "Automatyczne Okablowanie";
+            case "quartz_crystal": return "Kryształy Krzemu";
+            case "reanimated_sam": return "Ożywione DMO";
+            case "crystal_oscillator": return "Oscylatory";
+            case "sam_fluctuator": return "Fluktuator DMO";
+            default: return key;
         }
-        return key;
     }
 
     // --- SORTOWANIE TOPOLOGICZNE ---
@@ -98,17 +128,15 @@ public class FactoryEngine {
         Map<String, Double> usedExternal = new HashMap<>();
         Map<String, Double> globalSurplus = new HashMap<>();
         
-        // Kopia do operacji
         Map<String, Double> availableInputs = new HashMap<>(providedInputs);
 
         for (Map.Entry<String, Double> entry : demands.entrySet()) {
             totalItems.put(entry.getKey(), totalItems.getOrDefault(entry.getKey(), 0.0) + entry.getValue());
         }
 
-        // Faza 1: Propagacja potrzeb i maszyn w dół drzewa
-        Map<String, Double> producedByMachines = new HashMap<>();
         Map<String, Double> exactMachinesMap = new HashMap<>();
 
+        // Faza 1: Propagacja potrzeb i maszyn w dół drzewa
         for (String item : topOrder) {
             double exactAmount = totalItems.getOrDefault(item, 0.0);
             if (exactAmount <= 0) continue;
@@ -125,10 +153,14 @@ public class FactoryEngine {
                 result.edges.add(new Edge("ext_" + item, item, takeFromExt));
             }
 
-            if (recipe == null || recipe.inputs == null) continue; // Kopalnia/Pompa
+            // Zabezpieczenie przed brakami w bazie
+            if (recipe == null || recipe.outputs == null || !recipe.outputs.containsKey(item)) continue;
             if (exactAmount <= 0) continue; 
 
-            double exactMachines = exactAmount / recipe.outputQty;
+            // Wyciąganie wartości z nowej struktury słownika
+            double outQty = recipe.outputs.get(item);
+            
+            double exactMachines = exactAmount / outQty;
             double full = Math.floor(exactMachines);
             double frac = exactMachines - full;
             double newMachines = exactMachines;
@@ -143,30 +175,31 @@ public class FactoryEngine {
                 if (frac > 0.25 && full >= 1.0) newMachines = full + 1;
             }
 
-            double actualAmount = newMachines * recipe.outputQty;
+            double actualAmount = newMachines * outQty;
             double surplus = actualAmount - exactAmount;
             
             if (surplus > 0.001) globalSurplus.put(item, surplus);
             
-            producedByMachines.put(item, actualAmount);
             exactMachinesMap.put(item, newMachines);
 
             // Zgłaszanie zapotrzebowania niżej (do półproduktów)
-            double multiplier = actualAmount / recipe.outputQty;
-            for (Map.Entry<String, Double> inp : recipe.inputs.entrySet()) {
-                double needed = inp.getValue() * multiplier;
-                totalItems.put(inp.getKey(), totalItems.getOrDefault(inp.getKey(), 0.0) + needed);
-                
-                // Kumulujemy połączenia, aby się nie dublowały
-                boolean edgeExists = false;
-                for (Edge e : result.edges) {
-                    if (e.from.equals(inp.getKey()) && e.to.equals(item)) {
-                        e.amount += needed;
-                        edgeExists = true;
-                        break;
+            if (recipe.inputs != null) {
+                double multiplier = actualAmount / outQty;
+                for (Map.Entry<String, Double> inp : recipe.inputs.entrySet()) {
+                    double needed = inp.getValue() * multiplier;
+                    totalItems.put(inp.getKey(), totalItems.getOrDefault(inp.getKey(), 0.0) + needed);
+                    
+                    // Kumulujemy połączenia, aby się nie dublowały
+                    boolean edgeExists = false;
+                    for (Edge e : result.edges) {
+                        if (e.from.equals(inp.getKey()) && e.to.equals(item)) {
+                            e.amount += needed;
+                            edgeExists = true;
+                            break;
+                        }
                     }
+                    if (!edgeExists) result.edges.add(new Edge(inp.getKey(), item, needed));
                 }
-                if (!edgeExists) result.edges.add(new Edge(inp.getKey(), item, needed));
             }
         }
 
@@ -189,13 +222,15 @@ public class FactoryEngine {
             if (amount <= 0) continue;
             Recipe recipe = recipesDB.get(item);
 
-            if (exactMachinesMap.containsKey(item)) {
+            if (exactMachinesMap.containsKey(item) && recipe != null) {
                 double newMachines = exactMachinesMap.get(item);
                 double full = Math.floor(newMachines);
                 double frac = newMachines - full;
                 
                 String machineType = recipe.machine;
-                double baseMw = MACHINE_POWER.getOrDefault(machineType, 0.0);
+                
+                // Moc wczytywana bezpośrednio z JSON!
+                double baseMw = recipe.power;
                 
                 List<String> lines = new ArrayList<>();
                 lines.add("--- Linia: " + getName(item) + " ---");
@@ -228,11 +263,12 @@ public class FactoryEngine {
                 double ext = usedExternal.getOrDefault(item, 0.0);
                 if (ext > 0) lines.add("(+ Z zewnątrz: " + ext + "/min)");
                 
-                result.nodes.put(item, new NodeData(item, String.join("\n", lines), "box", "#ffe0b2"));
-                
-            } else {
-                // Kopalnia
-                result.nodes.put(item, new NodeData(item, "KOPALNIA/POMPA\n" + getName(item) + "\n(" + String.format(Locale.US, "%.1f", amount) + "/min)", "folder", "#e0e0e0"));
+                // Rozróżnienie wizualne kopalni od fabryk, ale z zachowaniem wyliczeń MW
+                if (recipe.inputs == null || recipe.inputs.isEmpty()) {
+                    result.nodes.put(item, new NodeData(item, "KOPALNIA/POMPA\n" + String.join("\n", lines), "folder", "#e0e0e0"));
+                } else {
+                    result.nodes.put(item, new NodeData(item, String.join("\n", lines), "box", "#ffe0b2"));
+                }
             }
         }
         

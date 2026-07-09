@@ -1,301 +1,52 @@
 {
-    "iron_ore": {
-        "output_qty": 1,
-        "name": "Ruda Żelaza"
-    },
-    "copper_ore": {
-        "output_qty": 1,
-        "name": "Ruda Miedzi"
-    },
-    "coal": {
-        "output_qty": 1,
-        "name": "Węgiel"
-    },
-    "limestone": {
-        "output_qty": 1,
-        "name": "Wapień"
-    },
-    "raw_quartz": {
-        "output_qty": 1,
-        "name": "Surowy Kwarzec"
-    },
-    "caterium_ore": {
-        "output_qty": 1,
-        "name": "Ruda Katerium"
-    },
-    "iron_ingot": {
-        "inputs": {
-            "iron_ore": 30
-        },
-        "output_qty": 30,
-        "machine": "Huta",
-        "name": "Sztabki Żelaza"
-    },
-    "copper_ingot": {
-        "inputs": {
-            "copper_ore": 30
-        },
-        "output_qty": 30,
-        "machine": "Huta",
-        "name": "Sztabki Miedzi"
-    },
-    "steel_ingot": {
-        "inputs": {
-            "iron_ore": 45,
-            "coal": 45
-        },
-        "output_qty": 45,
-        "machine": "Odlewnia",
-        "name": "Stal"
-    },
-    "caterium_ingot": {
-        "inputs": {
-            "caterium_ore": 45
-        },
-        "output_qty": 15,
-        "machine": "Huta",
-        "name": "Sztabki Katerium"
-    },
-    "iron_plate": {
-        "inputs": {
-            "iron_ingot": 30
-        },
-        "output_qty": 20,
-        "machine": "Konstruktor",
-        "name": "Żelazne Płyty"
-    },
-    "iron_rod": {
-        "inputs": {
-            "iron_ingot": 15
-        },
-        "output_qty": 15,
-        "machine": "Konstruktor",
-        "name": "Żelazne Pręty"
-    },
-    "wire": {
-        "inputs": {
-            "copper_ingot": 15
-        },
-        "output_qty": 30,
-        "machine": "Konstruktor",
-        "name": "Przewody"
-    },
-    "cable": {
-        "inputs": {
-            "wire": 60
-        },
-        "output_qty": 30,
-        "machine": "Konstruktor",
-        "name": "Kable"
-    },
-    "screw": {
-        "inputs": {
-            "iron_rod": 10
-        },
-        "output_qty": 40,
-        "machine": "Konstruktor",
-        "name": "Śruby"
-    },
-    "concrete": {
-        "inputs": {
-            "limestone": 45
-        },
-        "output_qty": 15,
-        "machine": "Konstruktor",
-        "name": "Beton"
-    },
-    "quartz_crystal": {
-        "inputs": {
-            "raw_quartz": 37.5
-        },
-        "output_qty": 22.5,
-        "machine": "Konstruktor",
-        "name": "Kryształy Krzemu"
-    },
-    "silica": {
-        "inputs": {
-            "raw_quartz": 22.5
-        },
-        "output_qty": 37.5,
-        "machine": "Konstruktor",
-        "name": "Krzemionka"
-    },
-    "copper_sheet": {
-        "inputs": {
-            "copper_ingot": 20
-        },
-        "output_qty": 10,
-        "machine": "Konstruktor",
-        "name": "Blacha Miedziana"
-    },
-    "quickwire": {
-        "inputs": {
-            "caterium_ingot": 12
-        },
-        "output_qty": 60,
-        "machine": "Konstruktor",
-        "name": "Kabel Katerium"
-    },
-    "reinforced_iron_plate": {
-        "inputs": {
-            "iron_plate": 30,
-            "screw": 60
-        },
-        "output_qty": 5,
-        "machine": "Montażysta",
-        "name": "Wzmocnione Płyty"
-    },
-    "rotor": {
-        "inputs": {
-            "iron_rod": 20,
-            "screw": 100
-        },
-        "output_qty": 4,
-        "machine": "Montażysta",
-        "name": "Wirniki"
-    },
-    "modular_frame": {
-        "inputs": {
-            "reinforced_iron_plate": 3,
-            "iron_rod": 12
-        },
-        "output_qty": 2,
-        "machine": "Montażysta",
-        "name": "Ramy Modułowe"
-    },
-    "modular_frame_alt": {
-        "inputs": {
-            "reinforced_iron_plate": 2,
-            "steel_pipe": 10
-        },
-        "output_qty": 3,
-        "machine": "Montażysta",
-        "name": "Ramy Mod. (Alt)"
-    },
-    "steel_pipe": {
-        "inputs": {
-            "steel_ingot": 30
-        },
-        "output_qty": 20,
-        "machine": "Konstruktor",
-        "name": "Stalowe Rury"
-    },
-    "steel_beam": {
-        "inputs": {
-            "steel_ingot": 60
-        },
-        "output_qty": 15,
-        "machine": "Konstruktor",
-        "name": "Stalowe Belki"
-    },
-    "encased_industrial_beam": {
-        "inputs": {
-            "steel_beam": 18,
-            "concrete": 36
-        },
-        "output_qty": 6,
-        "machine": "Montażysta",
-        "name": "Żelbetony"
-    },
-    "encased_industrial_beam_alt": {
-        "inputs": {
-            "steel_pipe": 24,
-            "concrete": 20
-        },
-        "output_qty": 4,
-        "machine": "Montażysta",
-        "name": "Żelbetony (Alt)"
-    },
-    "stator": {
-        "inputs": {
-            "steel_pipe": 15,
-            "wire": 40
-        },
-        "output_qty": 5,
-        "machine": "Montażysta",
-        "name": "Stojany"
-    },
-    "motor": {
-        "inputs": {
-            "rotor": 10,
-            "stator": 10
-        },
-        "output_qty": 5,
-        "machine": "Montażysta",
-        "name": "Silniki"
-    },
-    "ai_limiter": {
-        "inputs": {
-            "copper_sheet": 25,
-            "quickwire": 100
-        },
-        "output_qty": 5,
-        "machine": "Montażysta",
-        "name": "Ogranicznik AI (DMO)"
-    },
-    "em_control_rod": {
-        "inputs": {
-            "stator": 3,
-            "ai_limiter": 2
-        },
-        "output_qty": 1,
-        "machine": "Montażysta",
-        "name": "Fluktuatory"
-    },
-    "crystal_oscillator": {
-        "inputs": {
-            "quartz_crystal": 18,
-            "cable": 14,
-            "reinforced_iron_plate": 2.5
-        },
-        "output_qty": 1,
-        "machine": "Producent",
-        "name": "Oscylatory"
-    },
-    "smart_plating": {
-        "inputs": {
-            "reinforced_iron_plate": 2,
-            "rotor": 2
-        },
-        "output_qty": 2,
-        "machine": "Montażysta",
-        "name": "Inteligentne Poszycie"
-    },
-    "versatile_framework": {
-        "inputs": {"modular_frame": 2.5, "steel_beam": 30}, 
-        "output_qty": 5, 
-        "machine": "Montażysta", 
-        "name": "Kratownice"
-    },
-    "automated_wiring": {
-        "inputs": {
-            "stator": 2.5,
-            "cable": 50
-        },
-        "output_qty": 2.5,
-        "machine": "Montażysta",
-        "name": "Aut. Okablowanie"
-    },
-    "sam_ore": {
-        "output_qty": 1, 
-        "name": "Ruda DMO"
-    },
-    "reanimated_sam": {
-        "inputs": {
-            "sam_ore": 120
-        }, 
-        "output_qty": 30, 
-        "machine": "Konstruktor", 
-        "name": "Ożywione DMO"
-    },
-    "sam_fluctuator": {
-        "inputs": {
-            "reanimated_sam": 60, 
-            "wire": 50, 
-            "steel_pipe": 30
-        }, 
-        "output_qty": 10, 
-        "machine": "Producent", 
-        "name": "Fluktuator DMO"
-    }
+  "iron_ore": { "machine": "Kopalnia/Pompa", "inputs": {}, "outputs": { "iron_ore": 60 }, "power": 5 },
+  "copper_ore": { "machine": "Kopalnia/Pompa", "inputs": {}, "outputs": { "copper_ore": 60 }, "power": 5 },
+  "limestone": { "machine": "Kopalnia/Pompa", "inputs": {}, "outputs": { "limestone": 60 }, "power": 5 },
+  "coal": { "machine": "Kopalnia/Pompa", "inputs": {}, "outputs": { "coal": 60 }, "power": 5 },
+  "crude_oil": { "machine": "Pompa Ropy", "inputs": {}, "outputs": { "crude_oil": 120 }, "power": 40 },
+
+  "raw_quartz": { "machine": "Kopalnia/Pompa", "inputs": {}, "outputs": { "raw_quartz": 60 }, "power": 5 },
+  "silica": { "machine": "Konstruktor", "inputs": { "raw_quartz": 22.5 }, "outputs": { "silica": 37.5 }, "power": 4 },
+  "silica_alt": { "machine": "Montażysta", "inputs": { "raw_quartz": 22.5, "limestone": 37.5 }, "outputs": { "silica": 52.5 }, "power": 15 },
+
+  "iron_ingot": { "machine": "Huta", "inputs": { "iron_ore": 30 }, "outputs": { "iron_ingot": 30 }, "power": 4 },
+  "iron_ingot_alt": { "machine": "Odlewnia", "inputs": { "iron_ore": 40, "copper_ore": 10 }, "outputs": { "iron_ingot": 75 }, "power": 16 },
+  "copper_ingot": { "machine": "Huta", "inputs": { "copper_ore": 30 }, "outputs": { "copper_ingot": 30 }, "power": 4 },
+  "steel_ingot": { "machine": "Odlewnia", "inputs": { "iron_ore": 45, "coal": 45 }, "outputs": { "steel_ingot": 45 }, "power": 16 },
+
+  "iron_plate": { "machine": "Konstruktor", "inputs": { "iron_ingot": 30 }, "outputs": { "iron_plate": 20 }, "power": 4 },
+  "iron_rod": { "machine": "Konstruktor", "inputs": { "iron_ingot": 15 }, "outputs": { "iron_rod": 15 }, "power": 4 },
+  "wire": { "machine": "Konstruktor", "inputs": { "copper_ingot": 15 }, "outputs": { "wire": 30 }, "power": 4 },
+  "cable": { "machine": "Konstruktor", "inputs": { "wire": 60 }, "outputs": { "cable": 30 }, "power": 4 },
+  "concrete": { "machine": "Konstruktor", "inputs": { "limestone": 45 }, "outputs": { "concrete": 15 }, "power": 4 },
+  "concrete_alt": { "machine": "Montażysta", "inputs": { "limestone": 60, "silica": 15 }, "outputs": { "concrete": 50 }, "power": 15 },
+  "screw": { "machine": "Konstruktor", "inputs": { "iron_rod": 10 }, "outputs": { "screw": 40 }, "power": 4 },
+  "screw_alt": { "machine": "Konstruktor", "inputs": { "steel_beam": 5 }, "outputs": { "screw": 260 }, "power": 4 },
+  "copper_sheet": { "machine": "Konstruktor", "inputs": { "copper_ingot": 20 }, "outputs": { "copper_sheet": 10 }, "power": 4 },
+  "steel_beam": { "machine": "Konstruktor", "inputs": { "steel_ingot": 60 }, "outputs": { "steel_beam": 15 }, "power": 4 },
+  "steel_beam_alt": { "machine": "Odlewnia", "inputs": { "steel_ingot": 120, "concrete": 80 }, "outputs": { "steel_beam": 45 }, "power": 16 },
+  "steel_pipe": { "machine": "Konstruktor", "inputs": { "steel_ingot": 30 }, "outputs": { "steel_pipe": 20 }, "power": 4 },
+
+  "reinforced_plate": { "machine": "Montażysta", "inputs": { "iron_plate": 30, "screw": 60 }, "outputs": { "reinforced_plate": 5 }, "power": 15 },
+  "reinforced_plate_alt": { "machine": "Montażysta", "inputs": { "iron_plate": 18.75, "wire": 37.5 }, "outputs": { "reinforced_plate": 5.625 }, "power": 15 },
+  "rotor": { "machine": "Montażysta", "inputs": { "iron_rod": 20, "screw": 100 }, "outputs": { "rotor": 4 }, "power": 15 },
+  "modular_frame": { "machine": "Montażysta", "inputs": { "reinforced_plate": 3, "iron_rod": 12 }, "outputs": { "modular_frame": 2 }, "power": 15 },
+  "smart_plating": { "machine": "Montażysta", "inputs": { "reinforced_plate": 2, "rotor": 2 }, "outputs": { "smart_plating": 2 }, "power": 15 },
+  "motor": { "machine": "Montażysta", "inputs": { "stator": 10, "rotor": 10 }, "outputs": { "motor": 5 }, "power": 15 },
+  "stator": { "machine": "Montażysta", "inputs": { "steel_pipe": 15, "wire": 40 }, "outputs": { "stator": 5 }, "power": 15 },
+  "encased_beam": { "machine": "Montażysta", "inputs": { "steel_beam": 18, "concrete": 36 }, "outputs": { "encased_beam": 6 }, "power": 15 },
+  "circuit_board": { "machine": "Montażysta", "inputs": { "copper_sheet": 15, "plastic": 30 }, "outputs": { "circuit_board": 7.5 }, "power": 15 },
+  "versatile_framework": { "machine": "Montażysta", "inputs": { "modular_frame": 2.5, "steel_beam": 30 }, "outputs": { "versatile_framework": 5 }, "power": 15 },
+  "automated_wiring": { "machine": "Montażysta", "inputs": { "stator": 2.5, "cable": 50 }, "outputs": { "automated_wiring": 2.5 }, "power": 15 },
+  "modular_frame_alt": { "machine": "Montażysta", "inputs": { "reinforced_plate": 2, "steel_pipe": 10 }, "outputs": { "modular_frame": 3 }, "power": 15 },
+  "encased_beam_alt": { "machine": "Montażysta", "inputs": { "steel_pipe": 24, "concrete": 20 }, "outputs": { "encased_beam": 4 }, "power": 15 },
+
+  "plastic": { "machine": "Rafineria", "inputs": { "crude_oil": 30 }, "outputs": { "plastic": 20 }, "power": 30 },
+  "rubber": { "machine": "Rafineria", "inputs": { "crude_oil": 30 }, "outputs": { "rubber": 20 }, "power": 30 },
+  "fuel": { "machine": "Rafineria", "inputs": { "crude_oil": 60 }, "outputs": { "fuel": 40 }, "power": 30 },
+
+  "heavy_frame": { "machine": "Producent", "inputs": { "modular_frame": 10, "steel_pipe": 40, "encased_beam": 10, "screw": 240 }, "outputs": { "heavy_frame": 2 }, "power": 55 },
+  "computer": { "machine": "Producent", "inputs": { "circuit_board": 10, "cable": 20, "plastic": 40 }, "outputs": { "computer": 2.5 }, "power": 55 },
+  "modular_engine": { "machine": "Producent", "inputs": { "motor": 2, "rubber": 15, "smart_plating": 2 }, "outputs": { "modular_engine": 1 }, "power": 55 },
+  "adaptive_unit": { "machine": "Producent", "inputs": { "automated_wiring": 5, "circuit_board": 5, "heavy_frame": 1, "computer": 2 }, "outputs": { "adaptive_unit": 1 }, "power": 55 }
 }

@@ -1,16 +1,14 @@
 package com.ficsit.calculator.model;
 
-import com.google.gson.annotations.SerializedName;
 import java.util.Map;
 
 public class Recipe {
-    public String name;
     public String machine;
+    public double power;
     
-    // SerializedName mówi Gsonowi, że w JSON-ie klucz nazywa się "output_qty", 
-    // ale my w Javie wolimy standardową nazwę z wielką literą
-    @SerializedName("output_qty")
-    public double outputQty;
-    
+    // Surowce wchodzące (np. "iron_ore": 30.0)
     public Map<String, Double> inputs;
+    
+    // Surowce wychodzące (np. "iron_ingot": 30.0)
+    public Map<String, Double> outputs;
 }

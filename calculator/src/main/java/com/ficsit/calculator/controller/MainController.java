@@ -297,4 +297,24 @@ public class MainController {
         }
         return String.join(", ", parts);
     }
+
+    @FXML
+    private void openNewWindow() {
+        try {
+            // Ładujemy interfejs graficzny od nowa jako niezależny byt
+            javafx.fxml.FXMLLoader loader = new javafx.fxml.FXMLLoader(getClass().getResource("/view/MainView.fxml"));
+            javafx.scene.Parent root = loader.load();
+            
+            // Tworzymy nową "scenę" (okno) w systemie Windows
+            javafx.stage.Stage stage = new javafx.stage.Stage();
+            stage.setTitle("FICSIT INC. - Nowy Terminal (Niezależny)");
+            stage.setScene(new javafx.scene.Scene(root, 1200, 800));
+            
+            // Wyświetlamy drugie okno nie blokując pierwszego
+            stage.show();
+        } catch (Exception e) {
+            statusLabel.setText("Błąd krytyczny przy otwieraniu nowej instancji!");
+            e.printStackTrace();
+        }
+    }
 }

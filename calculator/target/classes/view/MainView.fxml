@@ -54,6 +54,9 @@
             <Button text="ZAPISZ GRAF JAKO OBRAZEK" onAction="#saveGraph" 
                     maxWidth="Infinity" style="-fx-background-color: #34495e; -fx-text-fill: white; -fx-font-weight: bold; -fx-padding: 8px;"/>
                     
+            <Button text="OTWÓRZ NOWY TERMINAL" onAction="#openNewWindow" 
+                    maxWidth="Infinity" style="-fx-background-color: #7f8c8d; -fx-text-fill: white; -fx-font-weight: bold; -fx-padding: 8px;"/>
+                    
             <Label fx:id="statusLabel" text="Oczekuje na dane..." style="-fx-text-fill: #7f8c8d;"/>
         </VBox>
     </left>
