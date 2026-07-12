@@ -3,6 +3,7 @@ package com.ficsit.calculator.model;
 import java.util.Map;
 
 public class Recipe {
+    public String id; // Dodane pole do śledzenia użytej receptury
     public String machine;
     public double power;
     

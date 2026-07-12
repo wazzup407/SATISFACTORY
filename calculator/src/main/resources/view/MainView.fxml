@@ -62,10 +62,24 @@
     </left>
 
     <center>
-        <ScrollPane fitToWidth="true" fitToHeight="true">
-            <StackPane style="-fx-background-color: #ffffff;">
-                <ImageView fx:id="graphImageView" preserveRatio="true"/>
-            </StackPane>
-        </ScrollPane>
+        <SplitPane orientation="VERTICAL" dividerPositions="0.25">
+            <VBox spacing="5" style="-fx-padding: 10; -fx-background-color: #ffffff;">
+                <Label text="Dostępne opcje technologiczne (Zestawienie unikalnych schematów):" style="-fx-font-weight: bold; -fx-text-fill: #34495e;"/>
+                <TableView fx:id="variantsTable" VBox.vgrow="ALWAYS">
+                    <columns>
+                        <TableColumn fx:id="colVariant" text="Wariant (Użyte przepisy)" prefWidth="250"/>
+                        <TableColumn fx:id="colPower" text="Moc (MW)" prefWidth="80"/>
+                        <TableColumn fx:id="colBuildings" text="Budynki" prefWidth="60"/>
+                        <TableColumn fx:id="colInputs" text="Całkowite wejście (surowce)" prefWidth="300"/>
+                        <TableColumn fx:id="colAction" text="Schemat" prefWidth="100"/>
+                    </columns>
+                </TableView>
+            </VBox>
+            <ScrollPane fitToWidth="true" fitToHeight="true">
+                <StackPane style="-fx-background-color: #ffffff;">
+                    <ImageView fx:id="graphImageView" preserveRatio="true"/>
+                </StackPane>
+            </ScrollPane>
+        </SplitPane>
     </center>
 </BorderPane>
