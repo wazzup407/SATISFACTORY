@@ -18,6 +18,7 @@
   "iron_rod": { "machine": "Konstruktor", "inputs": { "iron_ingot": 15 }, "outputs": { "iron_rod": 15 }, "power": 4 },
   "wire": { "machine": "Konstruktor", "inputs": { "copper_ingot": 15 }, "outputs": { "wire": 30 }, "power": 4 },
   "cable": { "machine": "Konstruktor", "inputs": { "wire": 60 }, "outputs": { "cable": 30 }, "power": 4 },
+  "cable_alt": { "machine": "Montażysta", "inputs": { "wire": 45, "rubber": 30 }, "outputs": { "cable": 100 }, "power": 15 },
   "concrete": { "machine": "Konstruktor", "inputs": { "limestone": 45 }, "outputs": { "concrete": 15 }, "power": 4 },
   "concrete_alt": { "machine": "Montażysta", "inputs": { "limestone": 60, "silica": 15 }, "outputs": { "concrete": 50 }, "power": 15 },
   "screw": { "machine": "Konstruktor", "inputs": { "iron_rod": 10 }, "outputs": { "screw": 40 }, "power": 4 },
