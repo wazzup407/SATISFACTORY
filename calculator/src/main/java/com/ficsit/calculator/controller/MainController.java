@@ -6,7 +6,9 @@ import guru.nidi.graphviz.engine.Format;
 import guru.nidi.graphviz.engine.Graphviz;
 import guru.nidi.graphviz.model.MutableGraph;
 import guru.nidi.graphviz.parse.Parser;
+import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -30,13 +32,12 @@ import java.util.stream.Collectors;
 public class MainController {
 
     @FXML private ListView<String> demandsList, providedList, surplusList;
-    @FXML private ComboBox<String> demandsCombo, providedCombo, surplusCombo;
+    @FXML private ComboBox<String> demandsCombo, providedCombo, surplusCombo, maxItemCombo;
     @FXML private TextField demandsQty, providedQty;
     @FXML private Label statusLabel;
     @FXML private ImageView graphImageView;
+    @FXML private CheckBox maxModeCheckbox;
 
-    // Elementy tabeli wyników
-    // Zmienione typy generyczne z String na Double, Integer i VariantOption
     @FXML private TableView<VariantOption> variantsTable;
     @FXML private TableColumn<VariantOption, String> colVariant;
     @FXML private TableColumn<VariantOption, Double> colPower;
@@ -51,13 +52,12 @@ public class MainController {
     private Map<String, Double> providedMap = new HashMap<>();
     private Set<String> surplusSet = new HashSet<>();
 
-    // Klasa reprezentująca zbiór danych dla wybranego wariantu technologicznego
     public static class VariantOption {
         public String variantName;
         public double power;
         public int buildings;
         public String inputsStr;
-        public double totalInputsSum; // NOWE: Suma całkowita do sortowania
+        public double totalInputsSum;
         public Map<String, Recipe> db;
         public CalculationResult result;
 
@@ -66,11 +66,12 @@ public class MainController {
             this.power = power;
             this.buildings = buildings;
             this.inputsStr = inputsStr;
-            this.totalInputsSum = totalInputsSum; // Przypisanie
+            this.totalInputsSum = totalInputsSum;
             this.db = db;
             this.result = result;
         }
     }
+
     @FXML
     public void initialize() {
         engine = new FactoryEngine();
@@ -78,7 +79,7 @@ public class MainController {
 
         List<String> items = new ArrayList<>();
         for (String key : engine.recipesDB.keySet()) {
-            if (!key.endsWith("_alt")) { // Do list wybieramy tylko główne nazwy
+            if (!key.matches(".*_alt\\d*$")) { 
                 items.add(engine.getName(key) + " (" + key + ")");
             }
         }
@@ -88,18 +89,22 @@ public class MainController {
         demandsCombo.setItems(options);
         providedCombo.setItems(options);
         surplusCombo.setItems(options);
+        maxItemCombo.setItems(options); // Lista uzupełniona dla trybu dopychania
         
         setupTable();
-
         statusLabel.setText("System FICSIT gotowy. Wybierz przedmioty z list.");
     }
     
+    @FXML
+    private void toggleMaxMode() {
+        // Blokowanie/Odblokowywanie rozwijanej listy wyboru
+        maxItemCombo.setDisable(!maxModeCheckbox.isSelected());
+    }
+    
     private void setupTable() {
-        // Nazwa
-        colVariant.setCellValueFactory(data -> new javafx.beans.property.SimpleStringProperty(data.getValue().variantName));
+        colVariant.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().variantName));
         
-        // Moc - Zwracamy Double, a formatujemy jako String w wizualnej komórce
-        colPower.setCellValueFactory(data -> new javafx.beans.property.SimpleObjectProperty<>(data.getValue().power));
+        colPower.setCellValueFactory(data -> new SimpleObjectProperty<>(data.getValue().power));
         colPower.setCellFactory(param -> new TableCell<VariantOption, Double>() {
             @Override
             protected void updateItem(Double item, boolean empty) {
@@ -108,23 +113,18 @@ public class MainController {
             }
         });
 
-        // Budynki - Zwracamy Integer, natywny tekst JavaFX wystarczy
-        colBuildings.setCellValueFactory(data -> new javafx.beans.property.SimpleObjectProperty<>(data.getValue().buildings));
+        colBuildings.setCellValueFactory(data -> new SimpleObjectProperty<>(data.getValue().buildings));
         
-        // Surowce - Zwracamy CAŁY obiekt wariantu, by mieć dostęp i do Stringa i do sumy.
-        colInputs.setCellValueFactory(data -> new javafx.beans.property.ReadOnlyObjectWrapper<>(data.getValue()));
+        colInputs.setCellValueFactory(data -> new ReadOnlyObjectWrapper<>(data.getValue()));
         colInputs.setCellFactory(param -> new TableCell<VariantOption, VariantOption>() {
             @Override
             protected void updateItem(VariantOption item, boolean empty) {
                 super.updateItem(item, empty);
-                setText(empty || item == null ? null : item.inputsStr); // Pokazujemy ładny tekst
+                setText(empty || item == null ? null : item.inputsStr);
             }
         });
-        
-        // Tłumaczymy JavaFX jak ma matematycznie porównywać ten obiekt
         colInputs.setComparator((v1, v2) -> Double.compare(v1.totalInputsSum, v2.totalInputsSum));
 
-        // Przycisk akcji
         colAction.setCellFactory(param -> new TableCell<VariantOption, Void>() {
             private final Button btn = new Button("Wybierz");
             {
@@ -142,34 +142,19 @@ public class MainController {
         });
     }
 
-    @FXML
-    private void addDemand() {
-        String selection = demandsCombo.getValue();
-        String qtyStr = demandsQty.getText().replace(",", "."); 
+    @FXML private void addDemand() { processInput(demandsCombo, demandsQty, demandsMap, demandsList); }
+    @FXML private void addProvided() { processInput(providedCombo, providedQty, providedMap, providedList); }
+    
+    private void processInput(ComboBox<String> combo, TextField qtyField, Map<String, Double> map, ListView<String> list) {
+        String selection = combo.getValue();
+        String qtyStr = qtyField.getText().replace(",", "."); 
         if (selection != null && !qtyStr.isEmpty()) {
             try {
                 double qty = Double.parseDouble(qtyStr);
                 String key = extractKey(selection);
-                demandsMap.put(key, demandsMap.getOrDefault(key, 0.0) + qty);
-                updateListView(demandsList, demandsMap);
-                demandsQty.clear();
-            } catch (NumberFormatException e) {
-                statusLabel.setText("BŁĄD: Ilość musi być liczbą!");
-            }
-        }
-    }
-
-    @FXML
-    private void addProvided() {
-        String selection = providedCombo.getValue();
-        String qtyStr = providedQty.getText().replace(",", ".");
-        if (selection != null && !qtyStr.isEmpty()) {
-            try {
-                double qty = Double.parseDouble(qtyStr);
-                String key = extractKey(selection);
-                providedMap.put(key, providedMap.getOrDefault(key, 0.0) + qty);
-                updateListView(providedList, providedMap);
-                providedQty.clear();
+                map.put(key, map.getOrDefault(key, 0.0) + qty);
+                updateListView(list, map);
+                qtyField.clear();
             } catch (NumberFormatException e) {
                 statusLabel.setText("BŁĄD: Ilość musi być liczbą!");
             }
@@ -206,67 +191,135 @@ public class MainController {
 
     @FXML
     private void handleGenerate() {
-        if (demandsMap.isEmpty()) {
-            statusLabel.setText("BŁĄD: Wybierz i dodaj (+) przynajmniej jeden produkt!");
+        if (demandsMap.isEmpty() && (!maxModeCheckbox.isSelected() || maxItemCombo.getValue() == null)) {
+            statusLabel.setText("BŁĄD: Wybierz i dodaj (+) przynajmniej jeden produkt lub włącz tryb dopychania!");
             return;
         }
 
+        boolean isMaxMode = maxModeCheckbox != null && maxModeCheckbox.isSelected();
+        String maxSelectedItemText = isMaxMode ? maxItemCombo.getValue() : null;
+        String maxItem = null;
+
+        if (isMaxMode) {
+            if (maxSelectedItemText == null) {
+                statusLabel.setText("BŁĄD: Wybierz produkt z listy poniżej 'Dopchnij pod korek'!");
+                return;
+            }
+            maxItem = extractKey(maxSelectedItemText);
+            if (providedMap.isEmpty()) {
+                statusLabel.setText("BŁĄD: Podaj limity (np. ropa 600) w sekcji zasilania, aby wyznaczyć sufit!");
+                return;
+            }
+        }
+        
+        engine.exactMode = isMaxMode;
+
         try {
-            statusLabel.setText("Generowanie kombinacji procesów...");
+            statusLabel.setText("Obliczanie optymalnych linii produkcyjnych...");
             
-            // 1. Zawsze startujemy ze "świeżej" oryginalnej bazy z pliku
             engine.loadDatabase("recipes.json");
             Map<String, Recipe> pristineDB = new HashMap<>(engine.recipesDB);
             
-            // 2. Znajdź wszystkie klucze, dla których istnieje alternatywa
-            List<String> itemsWithAlts = new ArrayList<>();
+            Map<String, List<String>> baseToVariants = new HashMap<>();
             for (String key : pristineDB.keySet()) {
-                if (key.endsWith("_alt")) {
-                    itemsWithAlts.add(key.replace("_alt", ""));
+                String baseKey = key.replaceAll("_alt\\d*$", "");
+                baseToVariants.putIfAbsent(baseKey, new ArrayList<>());
+                baseToVariants.get(baseKey).add(key);
+            }
+            
+            List<String> itemsWithAlts = new ArrayList<>();
+            for (Map.Entry<String, List<String>> entry : baseToVariants.entrySet()) {
+                if (entry.getValue().size() > 1) {
+                    itemsWithAlts.add(entry.getKey());
                 }
             }
             
-            // 3. Stwórz wszystkie możliwe permutacje baz z recepturami
             List<Map<String, Recipe>> allPermutations = new ArrayList<>();
-            generatePermutations(itemsWithAlts, 0, pristineDB, allPermutations);
+            generatePermutations(itemsWithAlts, 0, pristineDB, baseToVariants, allPermutations);
             
-            // 4. Testuj bazę. "Set" odrzuca puste ścieżki i powtórki użytych alternatyw!
             Set<Set<String>> seenAltSets = new HashSet<>();
             ObservableList<VariantOption> tableData = FXCollections.observableArrayList();
             
             for (Map<String, Recipe> dbVariant : allPermutations) {
                 engine.recipesDB = dbVariant; 
-                CalculationResult res = engine.calculateFactory(demandsMap, providedMap, surplusSet);
                 
-                // Zapisujemy unikalny wariant tylko, jeśli wnosi nowe przepisy dla naszej fabryki
+                Map<String, Double> activeDemands = new HashMap<>(demandsMap);
+                Map<String, Double> activeProvided = new HashMap<>(providedMap);
+                boolean foundLimit = false;
+
+                // --- NOWY SYSTEM DOPYCHANIA POJEDYNCZEGO PRODUKTU ---
+                if (isMaxMode && maxItem != null) {
+                    // 1. Liczymy "żelazną porcję" wziętą z panelu (np. sam proch)
+                    CalculationResult baseRes = engine.calculateFactory(activeDemands, new HashMap<>(), surplusSet);
+                    
+                    // 2. Liczymy "koszt jednostkowy" wybranego surowca (np. 1 Turbopaliwo = x Ropy)
+                    Map<String, Double> singleDemand = new HashMap<>();
+                    singleDemand.put(maxItem, 1.0);
+                    CalculationResult singleRes = engine.calculateFactory(singleDemand, new HashMap<>(), surplusSet);
+                    
+                    double minAdded = Double.MAX_VALUE;
+                    
+                    // 3. Sprawdzamy każdy limit i szukamy na ile nowych sztuk nam starczy
+                    for (Map.Entry<String, Double> limit : providedMap.entrySet()) {
+                        String inputKey = limit.getKey();
+                        double limitVal = limit.getValue();
+                        
+                        double usedCurrently = baseRes.ingredients.getOrDefault(inputKey, 0.0);
+                        double remaining = limitVal - usedCurrently; 
+                        
+                        double costPerUnit = singleRes.ingredients.getOrDefault(inputKey, 0.0);
+                        
+                        // Zabezpieczenie przed dzieleniem przez 0
+                        if (costPerUnit > 0.0001) {
+                            double addedUnits = remaining / costPerUnit; // Może być ujemne, co przytnie zamówienie
+                            if (addedUnits < minAdded) {
+                                minAdded = addedUnits;
+                            }
+                            foundLimit = true;
+                        }
+                    }
+                    
+                    // 4. Aktualizujemy "listę życzeń" fabryki
+                    if (foundLimit && minAdded != Double.MAX_VALUE) {
+                        double currentVal = activeDemands.getOrDefault(maxItem, 0.0);
+                        double newVal = currentVal + minAdded;
+                        if (newVal < 0.001) newVal = 0.0; // Nie możemy produkować poniżej 0
+                        activeDemands.put(maxItem, newVal);
+                    }
+                }
+
+                CalculationResult res = engine.calculateFactory(activeDemands, activeProvided, surplusSet);
+                
                 if (!seenAltSets.contains(res.usedAltRecipes)) {
                     seenAltSets.add(res.usedAltRecipes);
                     
-                    String vName = res.usedAltRecipes.isEmpty() ? "Standardowa" : 
+                    String altStr = res.usedAltRecipes.isEmpty() ? "Standardowa" : 
                                    "Alt: " + res.usedAltRecipes.stream()
                                                 .map(engine::getName)
                                                 .collect(Collectors.joining(", "));
+                    
+                    String vName = altStr;
+                    // Formatowanie, żeby na liście dumnie prezentował wyciśnięty wynik!
+                    if (isMaxMode && maxItem != null && foundLimit) {
+                        double finalQty = activeDemands.getOrDefault(maxItem, 0.0);
+                        vName = String.format(Locale.US, "[DOPCHNIĘTO: %.1fx %s]\n%s", finalQty, engine.getName(maxItem), altStr);
+                    }
                                                 
-                    // NOWE: Szybkie podliczenie faktycznej sumy sztuk wszystkich surowców wejściowych
                     double sumInputs = 0.0;
                     for (Double val : res.ingredients.values()) {
                         sumInputs += val;
                     }
                     
                     String inputsStr = formatExternalInputs(res.ingredients);
-                    
-                    // Dodajemy 'sumInputs' do wywołania konstruktora wariantu
                     tableData.add(new VariantOption(vName, res.totalPowerMW, res.totalBuildings, inputsStr, sumInputs, dbVariant, res));
                 }
             }
             
-            // Sortowanie (Najpierw standard, potem wg zużycia energii)
             tableData.sort(Comparator.comparingDouble(v -> v.power));
             variantsTable.setItems(tableData);
             
-            statusLabel.setText("Odkryto " + tableData.size() + " unikalnych linii dla tych żądań.");
+            statusLabel.setText(isMaxMode ? "Gotowe! Wyciśnięto ile się dało z limitów." : "Odkryto " + tableData.size() + " unikalnych schematów.");
             
-            // Od razu narysuj pierwszy (domyślny) wykres
             if (!tableData.isEmpty()) {
                 drawGraphForVariant(tableData.get(0));
             }
@@ -277,26 +330,22 @@ public class MainController {
         }
     }
     
-    private void generatePermutations(List<String> itemsWithAlts, int index, Map<String, Recipe> currentDB, List<Map<String, Recipe>> results) {
+    private void generatePermutations(List<String> itemsWithAlts, int index, Map<String, Recipe> currentDB, Map<String, List<String>> baseToVariants, List<Map<String, Recipe>> results) {
         if (index >= itemsWithAlts.size()) {
-            // Czyścimy zbędne znaczniki _alt (graf na nich nie pracuje bez podmiany)
             Map<String, Recipe> clean = new HashMap<>(currentDB);
-            clean.keySet().removeIf(k -> k.endsWith("_alt"));
+            clean.keySet().removeIf(k -> k.matches(".*_alt\\d*$"));
             results.add(clean);
             return;
         }
         
         String baseItem = itemsWithAlts.get(index);
-        String altItem = baseItem + "_alt";
+        List<String> variants = baseToVariants.get(baseItem); 
         
-        // Ścieżka 1: Zostawiamy przepis standardowy
-        generatePermutations(itemsWithAlts, index + 1, currentDB, results);
-        
-        // Ścieżka 2: Podmieniamy główny przepis na jego alternatywę
-        if (currentDB.containsKey(altItem)) {
+        for (String variantKey : variants) {
             Map<String, Recipe> branchDB = new HashMap<>(currentDB);
-            branchDB.put(baseItem, branchDB.get(altItem));
-            generatePermutations(itemsWithAlts, index + 1, branchDB, results);
+            branchDB.put(baseItem, branchDB.get(variantKey));
+            
+            generatePermutations(itemsWithAlts, index + 1, branchDB, baseToVariants, results);
         }
     }
     
@@ -305,7 +354,7 @@ public class MainController {
         List<String> parts = new ArrayList<>();
         
         List<Map.Entry<String, Double>> sorted = new ArrayList<>(ext.entrySet());
-        sorted.sort((a, b) -> Double.compare(b.getValue(), a.getValue())); // Sortuj po największych
+        sorted.sort((a, b) -> Double.compare(b.getValue(), a.getValue())); 
         
         for (Map.Entry<String, Double> e : sorted) {
             if (e.getValue() > 0.001) {
@@ -320,7 +369,7 @@ public class MainController {
     private void drawGraphForVariant(VariantOption opt) {
         engine.recipesDB = opt.db;
         try {
-            statusLabel.setText("Rysowanie schematu dla: " + opt.variantName);
+            statusLabel.setText("Rysowanie schematu...");
             String dotString = buildDotString(opt.result);
             MutableGraph g = new Parser().read(dotString);
             ByteArrayOutputStream os = new ByteArrayOutputStream();
@@ -364,7 +413,7 @@ public class MainController {
     private String buildDotString(CalculationResult result) {
         StringBuilder dot = new StringBuilder();
         dot.append("digraph G {\n");
-        dot.append("rankdir=LR; splines=ortho; nodesep=0.6; ranksep=1.2;\n");
+        dot.append("rankdir=LR; splines=polyline; nodesep=0.6; ranksep=1.2;\n");
         dot.append("node [style=\"rounded,filled\", fontname=\"Helvetica\", fontsize=10];\n");
         dot.append("edge [fontname=\"Helvetica\", fontsize=9, color=\"#666666\"];\n");
 
@@ -392,7 +441,7 @@ public class MainController {
             javafx.fxml.FXMLLoader loader = new javafx.fxml.FXMLLoader(getClass().getResource("/view/MainView.fxml"));
             javafx.scene.Parent root = loader.load();
             javafx.stage.Stage stage = new javafx.stage.Stage();
-            stage.setTitle("FICSIT INC. - Nowy Terminal (Niezależny)");
+            stage.setTitle("FICSIT INC. - Nowy Terminal");
             stage.setScene(new javafx.scene.Scene(root, 1200, 800));
             stage.show();
         } catch (Exception e) {

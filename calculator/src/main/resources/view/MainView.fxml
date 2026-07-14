@@ -48,6 +48,11 @@
             
             <Region VBox.vgrow="ALWAYS"/>
             
+            <VBox spacing="5" style="-fx-padding: 10 0 10 0; -fx-border-color: #cccccc; -fx-border-width: 1 0 0 0;">
+                <CheckBox fx:id="maxModeCheckbox" text="DOPCHNIJ POD KOREK" style="-fx-font-weight: bold; -fx-text-fill: #c0392b;" onAction="#toggleMaxMode"/>
+                <ComboBox fx:id="maxItemCombo" promptText="Wybierz produkt do dopchania..." maxWidth="Infinity" disable="true"/>
+            </VBox>
+            
             <Button fx:id="generateBtn" text="ANALIZUJ I GENERUJ" onAction="#handleGenerate" 
                     maxWidth="Infinity" style="-fx-background-color: #e67e22; -fx-text-fill: white; -fx-font-weight: bold; -fx-padding: 8px;"/>
             

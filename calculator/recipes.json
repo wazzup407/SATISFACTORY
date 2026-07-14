@@ -1,16 +1,25 @@
 {
   "iron_ore": { "machine": "Kopalnia/Pompa", "inputs": {}, "outputs": { "iron_ore": 60 }, "power": 5 },
+  "sulfur": { "machine": "Kopalnia/Pompa", "inputs": {}, "outputs": { "sulfur": 60 }, "power": 5 },
   "copper_ore": { "machine": "Kopalnia/Pompa", "inputs": {}, "outputs": { "copper_ore": 60 }, "power": 5 },
   "limestone": { "machine": "Kopalnia/Pompa", "inputs": {}, "outputs": { "limestone": 60 }, "power": 5 },
   "coal": { "machine": "Kopalnia/Pompa", "inputs": {}, "outputs": { "coal": 60 }, "power": 5 },
   "crude_oil": { "machine": "Pompa Ropy", "inputs": {}, "outputs": { "crude_oil": 120 }, "power": 40 },
+  "caterium_ore": { "machine": "Kopalnia/Pompa", "inputs": {}, "outputs": { "caterium_ore": 60 }, "power": 5 },
+  "bauxite": { "machine": "Kopalnia/Pompa", "inputs": {}, "outputs": { "bauxite": 60 }, "power": 5 },
+  "water": { "machine": "Pompa Wody", "inputs": {}, "outputs": { "water": 120 }, "power": 20 },
+  "empty_canister": { "machine": "Konstruktor", "inputs": { "plastic": 30 }, "outputs": { "empty_canister": 60 }, "power": 4 },
 
   "raw_quartz": { "machine": "Kopalnia/Pompa", "inputs": {}, "outputs": { "raw_quartz": 60 }, "power": 5 },
   "silica": { "machine": "Konstruktor", "inputs": { "raw_quartz": 22.5 }, "outputs": { "silica": 37.5 }, "power": 4 },
   "silica_alt": { "machine": "Montażysta", "inputs": { "raw_quartz": 22.5, "limestone": 37.5 }, "outputs": { "silica": 52.5 }, "power": 15 },
 
   "iron_ingot": { "machine": "Huta", "inputs": { "iron_ore": 30 }, "outputs": { "iron_ingot": 30 }, "power": 4 },
+  "caterium_ingot": { "machine": "Huta", "inputs": { "caterium_ore": 45 }, "outputs": { "caterium_ingot": 15 }, "power": 4 },
+  "quickwire": { "machine": "Konstruktor", "inputs": { "caterium_ingot": 12 }, "outputs": { "quickwire": 60 }, "power": 4 },
+  "quickwire_alt": { "machine": "Montażysta", "inputs": { "caterium_ingot": 7.5, "copper_ingot": 37.5 }, "outputs": { "quickwire": 90 }, "power": 15 },
   "iron_ingot_alt": { "machine": "Odlewnia", "inputs": { "iron_ore": 40, "copper_ore": 10 }, "outputs": { "iron_ingot": 75 }, "power": 16 },
+  "iron_ingot_alt2": { "machine": "Odlewnia", "inputs": { "iron_ore": 25, "limestone": 40 }, "outputs": { "iron_ingot": 50 }, "power": 16 },
   "copper_ingot": { "machine": "Huta", "inputs": { "copper_ore": 30 }, "outputs": { "copper_ingot": 30 }, "power": 4 },
   "steel_ingot": { "machine": "Odlewnia", "inputs": { "iron_ore": 45, "coal": 45 }, "outputs": { "steel_ingot": 45 }, "power": 16 },
 
@@ -40,14 +49,38 @@
   "versatile_framework": { "machine": "Montażysta", "inputs": { "modular_frame": 2.5, "steel_beam": 30 }, "outputs": { "versatile_framework": 5 }, "power": 15 },
   "automated_wiring": { "machine": "Montażysta", "inputs": { "stator": 2.5, "cable": 50 }, "outputs": { "automated_wiring": 2.5 }, "power": 15 },
   "modular_frame_alt": { "machine": "Montażysta", "inputs": { "reinforced_plate": 2, "steel_pipe": 10 }, "outputs": { "modular_frame": 3 }, "power": 15 },
+  "modular_frame_alt2": { "machine": "Montażysta", "inputs": { "reinforced_plate": 7.5, "screw": 140 }, "outputs": { "modular_frame": 5 }, "power": 15 },
   "encased_beam_alt": { "machine": "Montażysta", "inputs": { "steel_pipe": 24, "concrete": 20 }, "outputs": { "encased_beam": 4 }, "power": 15 },
 
-  "plastic": { "machine": "Rafineria", "inputs": { "crude_oil": 30 }, "outputs": { "plastic": 20 }, "power": 30 },
-  "rubber": { "machine": "Rafineria", "inputs": { "crude_oil": 30 }, "outputs": { "rubber": 20 }, "power": 30 },
-  "fuel": { "machine": "Rafineria", "inputs": { "crude_oil": 60 }, "outputs": { "fuel": 40 }, "power": 30 },
+  "gunpowder": { "machine": "Montażysta", "inputs": { "sulfur": 15, "coal": 15 }, "outputs": { "gunpowder": 30 }, "power": 15 },
+  "nobelisk": { "machine": "Montażysta", "inputs": { "gunpowder": 20, "steel_pipe": 20 }, "outputs": { "nobelisk": 10 }, "power": 15 },
+  "gunpowder_nonsmoke": { "machine": "Rafineria", "inputs": { "gunpowder": 20, "heavy_oil_residue": 10 }, "outputs": { "gunpowder_nonsmoke": 20 }, "power": 30 },
+  "gunpowder_alt": { "machine": "Montażysta", "inputs": { "sulfur": 7.5, "compacted_coal": 15 }, "outputs": { "gunpowder": 45 }, "power": 15 },
+
+  "plastic": { "machine": "Rafineria", "inputs": { "crude_oil": 30 }, "outputs": { "plastic": 20, "heavy_oil_residue": 10 }, "power": 30 },
+  "rubber": { "machine": "Rafineria", "inputs": { "crude_oil": 30 }, "outputs": { "rubber": 20, "heavy_oil_residue": 20 }, "power": 30 },
+  "heavy_oil_residue": { "machine": "Rafineria", "inputs": { "crude_oil": 30 }, "outputs": { "rubber": 20, "heavy_oil_residue": 20 }, "power": 30 },
+  "heavy_oil_residue_alt": { "machine": "Rafineria", "inputs": { "crude_oil": 30 }, "outputs": { "plastic": 20, "heavy_oil_residue": 10 }, "power": 30 },
+  "fuel_alt": { "machine": "Rafineria", "inputs": { "heavy_oil_residue": 60 }, "outputs": { "fuel": 40 }, "power": 30 },
+  "rubber_alt": { "machine": "Rafineria", "inputs": { "polymer_resin": 40, "water": 40 }, "outputs": { "rubber": 20 }, "power": 30 },
+  "plastic_alt": { "machine": "Rafineria", "inputs": { "polymer_resin": 60, "water": 20 }, "outputs": { "plastic": 20 }, "power": 30 },
+  "petroleum_coke": { "machine": "Rafineria", "inputs": { "heavy_oil_residue": 40 }, "outputs": { "petroleum_coke": 120 }, "power": 30 },
+  "compacted_coal": { "machine": "Montażysta", "inputs": { "coal": 25, "sulfur": 25 }, "outputs": { "compacted_coal": 25 }, "power": 15 },
+  "fuel": { "machine": "Rafineria", "inputs": { "crude_oil": 60 }, "outputs": { "fuel": 40, "polymer_resin": 30 }, "power": 30 },
+  "turbofuel": { "machine": "Rafineria", "inputs": { "fuel": 22.5, "compacted_coal": 15 }, "outputs": { "turbofuel": 18.75 }, "power": 30 },
 
   "heavy_frame": { "machine": "Producent", "inputs": { "modular_frame": 10, "steel_pipe": 40, "encased_beam": 10, "screw": 240 }, "outputs": { "heavy_frame": 2 }, "power": 55 },
   "computer": { "machine": "Producent", "inputs": { "circuit_board": 10, "cable": 20, "plastic": 40 }, "outputs": { "computer": 2.5 }, "power": 55 },
   "modular_engine": { "machine": "Producent", "inputs": { "motor": 2, "rubber": 15, "smart_plating": 2 }, "outputs": { "modular_engine": 1 }, "power": 55 },
-  "adaptive_unit": { "machine": "Producent", "inputs": { "automated_wiring": 5, "circuit_board": 5, "heavy_frame": 1, "computer": 2 }, "outputs": { "adaptive_unit": 1 }, "power": 55 }
+  "adaptive_unit": { "machine": "Producent", "inputs": { "automated_wiring": 5, "circuit_board": 5, "heavy_frame": 1, "computer": 2 }, "outputs": { "adaptive_unit": 1 }, "power": 55 },
+  "ai_limiter": { "machine": "Montażysta", "inputs": { "quickwire": 100, "copper_sheet": 25 }, "outputs": { "si_limiter": 5 }, "power": 15 },
+  "ai_limiter_alt": { "machine": "Montażysta", "inputs": { "quickwire": 120, "plastic": 28 }, "outputs": { "si_limiter": 8 }, "power": 15 },
+  "high_speed_connector": { "machine": "Producent", "inputs": { "quickwire": 210, "circuit_board": 3.75, "cable": 37.5 }, "outputs": { "high_speed_connector": 3.75 }, "power": 55 },
+
+  "alumina_solution": { "machine": "Rafineria", "inputs": { "bauxite": 120, "water": 180 }, "outputs": { "alumina_solution": 120, "silica": 50 }, "power": 30 },
+  "packaged_alumina_solution": { "machine": "Pakowaczka", "inputs": { "alumina_solution": 120, "empty_canister": 120 }, "outputs": { "packaged_alumina_solution": 120 }, "power": 10 },
+  "aluminum_scrap": { "machine": "Rafineria", "inputs": { "alumina_solution": 240, "coal": 120 }, "outputs": { "aluminum_scrap": 360, "water": 120 }, "power": 30 },
+  "aluminum_ingot": { "machine": "Odlewnia", "inputs": { "aluminum_scrap": 90, "silica": 75 }, "outputs": { "aluminum_ingot": 60 }, "power": 16 },
+  "alclad_aluminum_sheet": { "machine": "Montażysta", "inputs": { "aluminum_ingot": 30, "copper_ingot": 10 }, "outputs": { "alclad_aluminum_sheet": 30 }, "power": 15 },
+  "aluminum_casing": { "machine": "Konstruktor", "inputs": { "aluminum_ingot": 90 }, "outputs": { "aluminum_casing": 60 }, "power": 4 }
 }
