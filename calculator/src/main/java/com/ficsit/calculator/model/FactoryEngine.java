@@ -10,7 +10,7 @@ import java.util.*;
 public class FactoryEngine {
 
     public Map<String, Recipe> recipesDB;
-    public boolean exactMode = false;
+    public boolean allowRounding = true;
 
     public static class Edge {
         public String from, to;
@@ -216,7 +216,8 @@ public class FactoryEngine {
             boolean isFinal = demands.containsKey(item);
             boolean isWanted = wantedSurplus.contains(item);
 
-            if (!exactMode) {
+            // LOGIKA ZAOKRĄGLEŃ
+            if (allowRounding) {
                 if (isWanted) {
                     if (frac > 0.001) newMachines = full + 1;
                 } else if (isFinal) {

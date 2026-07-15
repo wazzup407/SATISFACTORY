@@ -37,6 +37,7 @@ public class MainController {
     @FXML private Label statusLabel;
     @FXML private ImageView graphImageView;
     @FXML private CheckBox maxModeCheckbox;
+    @FXML private CheckBox roundMachinesCheckbox;
 
     @FXML private TableView<VariantOption> variantsTable;
     @FXML private TableColumn<VariantOption, String> colVariant;
@@ -197,6 +198,7 @@ public class MainController {
         }
 
         boolean isMaxMode = maxModeCheckbox != null && maxModeCheckbox.isSelected();
+        boolean doRounding = roundMachinesCheckbox != null && roundMachinesCheckbox.isSelected();
         String maxSelectedItemText = isMaxMode ? maxItemCombo.getValue() : null;
         String maxItem = null;
 
@@ -212,7 +214,7 @@ public class MainController {
             }
         }
         
-        engine.exactMode = isMaxMode;
+        engine.allowRounding = doRounding && !isMaxMode;
 
         try {
             statusLabel.setText("Obliczanie optymalnych linii produkcyjnych...");

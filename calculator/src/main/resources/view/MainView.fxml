@@ -48,14 +48,17 @@
             
             <Region VBox.vgrow="ALWAYS"/>
             
+            <CheckBox fx:id="roundMachinesCheckbox" selected="true" style="-fx-font-weight: bold; -fx-text-fill: #2980b9;" text="ZAOKRĄGLAJ WYNIKI (nadwyżki)">
+            <VBox.margin><Insets bottom="10"/></VBox.margin>
+            </CheckBox>
+        
             <VBox spacing="5" style="-fx-padding: 10 0 10 0; -fx-border-color: #cccccc; -fx-border-width: 1 0 0 0;">
-                <CheckBox fx:id="maxModeCheckbox" text="DOPCHNIJ POD KOREK" style="-fx-font-weight: bold; -fx-text-fill: #c0392b;" onAction="#toggleMaxMode"/>
-                <ComboBox fx:id="maxItemCombo" promptText="Wybierz produkt do dopchania..." maxWidth="Infinity" disable="true"/>
+            <CheckBox fx:id="maxModeCheckbox" onAction="#toggleMaxMode" style="-fx-font-weight: bold; -fx-text-fill: #c0392b;" text="DOPCHNIJ POD KOREK"/>
+            <ComboBox disable="true" fx:id="maxItemCombo" maxWidth="Infinity" promptText="Wybierz produkt do dopchania..."/>
             </VBox>
-            
-            <Button fx:id="generateBtn" text="ANALIZUJ I GENERUJ" onAction="#handleGenerate" 
-                    maxWidth="Infinity" style="-fx-background-color: #e67e22; -fx-text-fill: white; -fx-font-weight: bold; -fx-padding: 8px;"/>
-            
+        
+            <Button fx:id="generateBtn" maxWidth="Infinity" onAction="#handleGenerate" style="-fx-background-color: #e67e22; -fx-text-fill: white; -fx-font-weight: bold; -fx-padding: 8px;" text="ANALIZUJ I GENERUJ"/>
+
             <Button text="ZAPISZ GRAF JAKO OBRAZEK" onAction="#saveGraph" 
                     maxWidth="Infinity" style="-fx-background-color: #34495e; -fx-text-fill: white; -fx-font-weight: bold; -fx-padding: 8px;"/>
                     
