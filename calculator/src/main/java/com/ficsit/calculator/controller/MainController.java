@@ -200,122 +200,51 @@ public class MainController {
         boolean isMaxMode = maxModeCheckbox != null && maxModeCheckbox.isSelected();
         boolean doRounding = roundMachinesCheckbox != null && roundMachinesCheckbox.isSelected();
         String maxSelectedItemText = isMaxMode ? maxItemCombo.getValue() : null;
-        String maxItem = null;
+        String maxItem = isMaxMode && maxSelectedItemText != null ? extractKey(maxSelectedItemText) : null;
 
-        if (isMaxMode) {
-            if (maxSelectedItemText == null) {
-                statusLabel.setText("BŁĄD: Wybierz produkt z listy poniżej 'Dopchnij pod korek'!");
-                return;
-            }
-            maxItem = extractKey(maxSelectedItemText);
-            if (providedMap.isEmpty()) {
-                statusLabel.setText("BŁĄD: Podaj limity (np. ropa 600) w sekcji zasilania, aby wyznaczyć sufit!");
-                return;
-            }
+        if (isMaxMode && maxItem == null) {
+            statusLabel.setText("BŁĄD: Wybierz produkt z listy poniżej 'Dopchnij pod korek'!");
+            return;
+        }
+        if (isMaxMode && providedMap.isEmpty()) {
+            statusLabel.setText("BŁĄD: Podaj limity (np. ropa 600) w sekcji zasilania, aby wyznaczyć sufit!");
+            return;
         }
         
         engine.allowRounding = doRounding && !isMaxMode;
 
         try {
             statusLabel.setText("Obliczanie optymalnych linii produkcyjnych...");
-            
             engine.loadDatabase("recipes.json");
             Map<String, Recipe> pristineDB = new HashMap<>(engine.recipesDB);
             
+            // 1. Grupowanie receptur podstawowych i alternatywnych
             Map<String, List<String>> baseToVariants = new HashMap<>();
             for (String key : pristineDB.keySet()) {
                 String baseKey = key.replaceAll("_alt\\d*$", "");
-                baseToVariants.putIfAbsent(baseKey, new ArrayList<>());
-                baseToVariants.get(baseKey).add(key);
+                baseToVariants.computeIfAbsent(baseKey, k -> new ArrayList<>()).add(key);
             }
             
+            // 2. PRUNING: Znalezienie tylko tych przedmiotów, które faktycznie są potrzebne!
+            Set<String> neededItems = new HashSet<>();
+            Set<String> targets = new HashSet<>(demandsMap.keySet());
+            if (maxItem != null) targets.add(maxItem);
+            findRelevantItems(targets, baseToVariants, pristineDB, neededItems);
+            
+            // 3. Wybór do permutacji TYLKO potrzebnych i posiadających alternatywy
             List<String> itemsWithAlts = new ArrayList<>();
             for (Map.Entry<String, List<String>> entry : baseToVariants.entrySet()) {
-                if (entry.getValue().size() > 1) {
+                if (entry.getValue().size() > 1 && neededItems.contains(entry.getKey())) {
                     itemsWithAlts.add(entry.getKey());
                 }
             }
             
-            List<Map<String, Recipe>> allPermutations = new ArrayList<>();
-            generatePermutations(itemsWithAlts, 0, pristineDB, baseToVariants, allPermutations);
-            
-            Set<Set<String>> seenAltSets = new HashSet<>();
             ObservableList<VariantOption> tableData = FXCollections.observableArrayList();
+            Set<Set<String>> seenAltSets = new HashSet<>();
+            Map<String, Recipe> workDB = new HashMap<>(pristineDB); // Pojedyncza instancja dla oszczędności RAM
             
-            for (Map<String, Recipe> dbVariant : allPermutations) {
-                engine.recipesDB = dbVariant; 
-                
-                Map<String, Double> activeDemands = new HashMap<>(demandsMap);
-                Map<String, Double> activeProvided = new HashMap<>(providedMap);
-                boolean foundLimit = false;
-
-                // --- NOWY SYSTEM DOPYCHANIA POJEDYNCZEGO PRODUKTU ---
-                if (isMaxMode && maxItem != null) {
-                    // 1. Liczymy "żelazną porcję" wziętą z panelu (np. sam proch)
-                    CalculationResult baseRes = engine.calculateFactory(activeDemands, new HashMap<>(), surplusSet);
-                    
-                    // 2. Liczymy "koszt jednostkowy" wybranego surowca (np. 1 Turbopaliwo = x Ropy)
-                    Map<String, Double> singleDemand = new HashMap<>();
-                    singleDemand.put(maxItem, 1.0);
-                    CalculationResult singleRes = engine.calculateFactory(singleDemand, new HashMap<>(), surplusSet);
-                    
-                    double minAdded = Double.MAX_VALUE;
-                    
-                    // 3. Sprawdzamy każdy limit i szukamy na ile nowych sztuk nam starczy
-                    for (Map.Entry<String, Double> limit : providedMap.entrySet()) {
-                        String inputKey = limit.getKey();
-                        double limitVal = limit.getValue();
-                        
-                        double usedCurrently = baseRes.ingredients.getOrDefault(inputKey, 0.0);
-                        double remaining = limitVal - usedCurrently; 
-                        
-                        double costPerUnit = singleRes.ingredients.getOrDefault(inputKey, 0.0);
-                        
-                        // Zabezpieczenie przed dzieleniem przez 0
-                        if (costPerUnit > 0.0001) {
-                            double addedUnits = remaining / costPerUnit; // Może być ujemne, co przytnie zamówienie
-                            if (addedUnits < minAdded) {
-                                minAdded = addedUnits;
-                            }
-                            foundLimit = true;
-                        }
-                    }
-                    
-                    // 4. Aktualizujemy "listę życzeń" fabryki
-                    if (foundLimit && minAdded != Double.MAX_VALUE) {
-                        double currentVal = activeDemands.getOrDefault(maxItem, 0.0);
-                        double newVal = currentVal + minAdded;
-                        if (newVal < 0.001) newVal = 0.0; // Nie możemy produkować poniżej 0
-                        activeDemands.put(maxItem, newVal);
-                    }
-                }
-
-                CalculationResult res = engine.calculateFactory(activeDemands, activeProvided, surplusSet);
-                
-                if (!seenAltSets.contains(res.usedAltRecipes)) {
-                    seenAltSets.add(res.usedAltRecipes);
-                    
-                    String altStr = res.usedAltRecipes.isEmpty() ? "Standardowa" : 
-                                   "Alt: " + res.usedAltRecipes.stream()
-                                                .map(engine::getName)
-                                                .collect(Collectors.joining(", "));
-                    
-                    String vName = altStr;
-                    // Formatowanie, żeby na liście dumnie prezentował wyciśnięty wynik!
-                    if (isMaxMode && maxItem != null && foundLimit) {
-                        double finalQty = activeDemands.getOrDefault(maxItem, 0.0);
-                        vName = String.format(Locale.US, "[DOPCHNIĘTO: %.1fx %s]\n%s", finalQty, engine.getName(maxItem), altStr);
-                    }
-                                                
-                    double sumInputs = 0.0;
-                    for (Double val : res.ingredients.values()) {
-                        sumInputs += val;
-                    }
-                    
-                    String inputsStr = formatExternalInputs(res.ingredients);
-                    tableData.add(new VariantOption(vName, res.totalPowerMW, res.totalBuildings, inputsStr, sumInputs, dbVariant, res));
-                }
-            }
+            // 4. Natychmiastowa ewaluacja (Backtracking) zamiast gromadzenia w pamięci
+            evaluatePermutations(itemsWithAlts, 0, workDB, pristineDB, baseToVariants, tableData, seenAltSets, isMaxMode, maxItem);
             
             tableData.sort(Comparator.comparingDouble(v -> v.power));
             variantsTable.setItems(tableData);
@@ -331,24 +260,95 @@ public class MainController {
             e.printStackTrace();
         }
     }
-    
-    private void generatePermutations(List<String> itemsWithAlts, int index, Map<String, Recipe> currentDB, Map<String, List<String>> baseToVariants, List<Map<String, Recipe>> results) {
+
+    // Nowa metoda optymalizująca: Skanuje graf drzewa w głąb w poszukiwaniu zależności
+    private void findRelevantItems(Set<String> items, Map<String, List<String>> baseToVariants, Map<String, Recipe> db, Set<String> relevant) {
+        for (String item : items) {
+            if (relevant.contains(item)) continue;
+            relevant.add(item);
+            
+            List<String> variants = baseToVariants.getOrDefault(item, Collections.singletonList(item));
+            for (String v : variants) {
+                Recipe r = db.get(v);
+                if (r != null && r.inputs != null) {
+                    findRelevantItems(r.inputs.keySet(), baseToVariants, db, relevant);
+                }
+            }
+        }
+    }
+
+    // Nowa metoda zastępująca starą `generatePermutations`
+    private void evaluatePermutations(List<String> itemsWithAlts, int index, Map<String, Recipe> workDB, Map<String, Recipe> pristineDB, Map<String, List<String>> baseToVariants, ObservableList<VariantOption> tableData, Set<Set<String>> seenAltSets, boolean isMaxMode, String maxItem) {
+        
+        // ZABEZPIECZENIE: Przerwij zgadywanie, jeśli znaleziono już 500 wariantów.
+        // Zapobiega "zamarzaniu" programu na długie minuty.
+        if (tableData.size() >= 500) return; 
+
         if (index >= itemsWithAlts.size()) {
-            Map<String, Recipe> clean = new HashMap<>(currentDB);
+            Map<String, Recipe> clean = new HashMap<>(workDB);
             clean.keySet().removeIf(k -> k.matches(".*_alt\\d*$"));
-            results.add(clean);
+            engine.recipesDB = clean; 
+            
+            Map<String, Double> activeDemands = new HashMap<>(demandsMap);
+            Map<String, Double> activeProvided = new HashMap<>(providedMap);
+            boolean foundLimit = false;
+
+            // Twój kod logiki dopychania
+            if (isMaxMode && maxItem != null) {
+                CalculationResult baseRes = engine.calculateFactory(activeDemands, new HashMap<>(), surplusSet);
+                Map<String, Double> singleDemand = new HashMap<>();
+                singleDemand.put(maxItem, 1.0);
+                CalculationResult singleRes = engine.calculateFactory(singleDemand, new HashMap<>(), surplusSet);
+                
+                double minAdded = Double.MAX_VALUE;
+                for (Map.Entry<String, Double> limit : providedMap.entrySet()) {
+                    double usedCurrently = baseRes.ingredients.getOrDefault(limit.getKey(), 0.0);
+                    double remaining = limit.getValue() - usedCurrently; 
+                    double costPerUnit = singleRes.ingredients.getOrDefault(limit.getKey(), 0.0);
+                    
+                    if (costPerUnit > 0.0001) {
+                        double addedUnits = remaining / costPerUnit;
+                        if (addedUnits < minAdded) minAdded = addedUnits;
+                        foundLimit = true;
+                    }
+                }
+                
+                if (foundLimit && minAdded != Double.MAX_VALUE) {
+                    double currentVal = activeDemands.getOrDefault(maxItem, 0.0);
+                    activeDemands.put(maxItem, Math.max(0.0, currentVal + minAdded));
+                }
+            }
+
+            CalculationResult res = engine.calculateFactory(activeDemands, activeProvided, surplusSet);
+            
+            if (!seenAltSets.contains(res.usedAltRecipes)) {
+                seenAltSets.add(res.usedAltRecipes);
+                
+                String altStr = res.usedAltRecipes.isEmpty() ? "Standardowa" : 
+                               "Alt: " + res.usedAltRecipes.stream().map(engine::getName).collect(Collectors.joining(", "));
+                String vName = altStr;
+                
+                if (isMaxMode && maxItem != null && foundLimit) {
+                    double finalQty = activeDemands.getOrDefault(maxItem, 0.0);
+                    vName = String.format(Locale.US, "[DOPCHNIĘTO: %.1fx %s]\n%s", finalQty, engine.getName(maxItem), altStr);
+                }
+                                            
+                double sumInputs = res.ingredients.values().stream().mapToDouble(Double::doubleValue).sum();
+                String inputsStr = formatExternalInputs(res.ingredients);
+                tableData.add(new VariantOption(vName, res.totalPowerMW, res.totalBuildings, inputsStr, sumInputs, clean, res));
+            }
             return;
         }
         
         String baseItem = itemsWithAlts.get(index);
-        List<String> variants = baseToVariants.get(baseItem); 
+        Recipe original = workDB.get(baseItem); // Zapisujemy oryginalny stan
         
-        for (String variantKey : variants) {
-            Map<String, Recipe> branchDB = new HashMap<>(currentDB);
-            branchDB.put(baseItem, branchDB.get(variantKey));
-            
-            generatePermutations(itemsWithAlts, index + 1, branchDB, baseToVariants, results);
+        for (String variantKey : baseToVariants.get(baseItem)) {
+            workDB.put(baseItem, pristineDB.get(variantKey)); 
+            evaluatePermutations(itemsWithAlts, index + 1, workDB, pristineDB, baseToVariants, tableData, seenAltSets, isMaxMode, maxItem);
         }
+        
+        workDB.put(baseItem, original); // BACKTRACKING: Przywracamy po pętli (odzyskanie pamięci)
     }
     
     private String formatExternalInputs(Map<String, Double> ext) {
