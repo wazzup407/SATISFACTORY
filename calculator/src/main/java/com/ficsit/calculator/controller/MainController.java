@@ -333,7 +333,7 @@ public class MainController {
                     vName = String.format(Locale.US, "[DOPCHNIĘTO: %.1fx %s]\n%s", finalQty, engine.getName(maxItem), altStr);
                 }
                                             
-                double sumInputs = res.ingredients.values().stream().mapToDouble(Double::doubleValue).sum();
+                double sumInputs = res.ingredients.values().stream().mapToDouble(v -> v != null ? v : 0.0).sum();
                 String inputsStr = formatExternalInputs(res.ingredients);
                 tableData.add(new VariantOption(vName, res.totalPowerMW, res.totalBuildings, inputsStr, sumInputs, clean, res));
             }
