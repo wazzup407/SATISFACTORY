@@ -144,6 +144,12 @@
   "nuclear_pasta": { "machine": "Akcelerator cząstek", "inputs": { "copper_powder": 100, "pressure_conversion_cube": 0.5 }, "outputs": { "nuclear_pasta": 0.5 }, "power": 1000 },
   "plutonium_waste": { "machine": "Elektrownia jądrowa", "inputs": { "plutonium_fuel_rod": 0.1, "water": 240 }, "outputs": { "plutonium_waste": 1 }, "power": 0 },
 
+
+  "wzbudzona_materia": { "machine": "Konwerter", "inputs": {}, "outputs": { "wzbudzona_materia": 200 }, "power": 250 },
+  "dark_matter_crystal": { "machine": "Akcelerator cząstek", "inputs": { "diamonds": 30, "dark_matter": 150 }, "outputs": { "dark_matter_crystal": 30 }, "power": 1000 },
+  "superposition_oscilator": { "machine": "Koder", "inputs": { "dark_matter_crystal": 30, "crystal_oscillator": 5, "alclad_aluminum_sheet": 45, "wzbudzona_materia": 125 }, "outputs": { "superposition_oscilator": 5, "dark_matter": 125 }, "power": 1000 },
+  "neural processor": { "machine": "Koder", "inputs": { "time_crystal": 15, "supercomputer": 3, "ficsit_trigon": 45, "wzbudzona_materia": 75 }, "outputs": { "neural_processor": 3, "dark_matter": 75 }, "power": 1000 },
+  "ai_expansion": { "machine": "Koder", "inputs": { "neural_processor": 4, "magnetic_field_generator": 4, "superposition_oscilator": 4, "wzbudzona_materia": 100 }, "outputs": { "ai_expansion": 4, "dark_matter": 100 }, "power": 1000 },
   "ficsit_trigon": { "machine": "Konstruktor", "inputs": { "ficsit_ingot": 10 }, "outputs": { "ficsit_trigon": 30 }, "power": 4 },
   
   "diamonds": { "machine": "Akcelerator cząstek", "inputs": { "coal": 600 }, "outputs": { "diamonds": 30 }, "power": 1000 },
