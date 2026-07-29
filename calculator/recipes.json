@@ -152,6 +152,6 @@
   
   "ficsit_ingot": { "machine": "Konwerter", "inputs": { "caterium_ingot": 60, "ozywione_dmo": 45 }, "outputs": { "ficsit_ingot": 15 }, "power": 250 },
   "ozywione_dmo": { "machine": "Konstruktor", "inputs": { "dmo": 120 }, "outputs": { "ozywione_dmo": 30 }, "power": 4 },
-  "ficsit_ingot_alt": { "machine": "Konwerter", "inputs": { "aluminium_ingot": 120, "ozywione_dmo": 60 }, "outputs": { "ficsit_ingot": 30 }, "power": 250 },
+  "ficsit_ingot_alt": { "machine": "Konwerter", "inputs": { "aluminum_ingot": 120, "ozywione_dmo": 60 }, "outputs": { "ficsit_ingot": 30 }, "power": 250 },
   "ficsit_ingot_alt2": { "machine": "Konwerter", "inputs": { "iron_ingot": 240, "ozywione_dmo": 40}, "outputs": { "ficsit_ingot": 10 }, "power": 250 }
 }
