@@ -1,6 +1,7 @@
 {
   "iron_ore": { "machine": "Kopalnia/Pompa", "inputs": {}, "outputs": { "iron_ore": 60 }, "power": 5 },
   "sulfur": { "machine": "Kopalnia/Pompa", "inputs": {}, "outputs": { "sulfur": 60 }, "power": 5 },
+  "dmo": { "machine": "Kopalnia/Pompa", "inputs": {}, "outputs": { "dmo": 60 }, "power": 5 },
   "copper_ore": { "machine": "Kopalnia/Pompa", "inputs": {}, "outputs": { "copper_ore": 60 }, "power": 5 },
   "limestone": { "machine": "Kopalnia/Pompa", "inputs": {}, "outputs": { "limestone": 60 }, "power": 5 },
   "coal": { "machine": "Kopalnia/Pompa", "inputs": {}, "outputs": { "coal": 60 }, "power": 5 },
@@ -23,7 +24,7 @@
   "iron_ingot_alt2": { "machine": "Odlewnia", "inputs": { "iron_ore": 25, "limestone": 40 }, "outputs": { "iron_ingot": 50 }, "power": 16 },
   "copper_ingot": { "machine": "Huta", "inputs": { "copper_ore": 30 }, "outputs": { "copper_ingot": 30 }, "power": 4 },
   "steel_ingot": { "machine": "Odlewnia", "inputs": { "iron_ore": 45, "coal": 45 }, "outputs": { "steel_ingot": 45 }, "power": 16 },
-  "steel_ingot_alt": { "machine": "Odlewnia", "inputs": { "iron_ore": 40, "coal": 40 }, "outputs": { "steel_ingot": 60 }, "power": 16 },
+  "steel_ingot_alt": { "machine": "Odlewnia", "inputs": { "iron_ingot": 40, "coal": 40 }, "outputs": { "steel_ingot": 60 }, "power": 16 },
   
   "iron_plate": { "machine": "Konstruktor", "inputs": { "iron_ingot": 30 }, "outputs": { "iron_plate": 20 }, "power": 4 },
   "iron_rod": { "machine": "Konstruktor", "inputs": { "iron_ingot": 15 }, "outputs": { "iron_rod": 15 }, "power": 4 },
@@ -141,5 +142,16 @@
   "copper_powder": { "machine": "Konstruktor", "inputs": { "copper_ingot": 300 }, "outputs": { "copper_powder": 50 }, "power": 4 },
   "pressure_conversion_cube": { "machine": "Montażysta", "inputs": { "fused_modular_frame": 1, "radio_control_unit": 2 }, "outputs": { "pressure_conversion_cube": 1 }, "power": 15 },
   "nuclear_pasta": { "machine": "Akcelerator cząstek", "inputs": { "copper_powder": 100, "pressure_conversion_cube": 0.5 }, "outputs": { "nuclear_pasta": 0.5 }, "power": 1000 },
-  "plutonium_waste": { "machine": "Elektrownia jądrowa", "inputs": { "plutonium_fuel_rod": 0.1, "water": 240 }, "outputs": { "plutonium_waste": 1 }, "power": 0 }
+  "plutonium_waste": { "machine": "Elektrownia jądrowa", "inputs": { "plutonium_fuel_rod": 0.1, "water": 240 }, "outputs": { "plutonium_waste": 1 }, "power": 0 },
+
+  "ficsit_trigon": { "machine": "Konstruktor", "inputs": { "ficsit_ingot": 10 }, "outputs": { "ficsit_trigon": 30 }, "power": 4 },
+  
+  "diamonds": { "machine": "Akcelerator cząstek", "inputs": { "coal": 600 }, "outputs": { "diamonds": 30 }, "power": 1000 },
+  "time_crystal": { "machine": "Konwerter", "inputs": { "diamonds": 12 }, "outputs": { "time_crystal": 6 }, "power": 250 },
+  "biochemical_printer": { "machine": "Blender", "inputs": { "assembly_director_system": 0.5, "ficsit_trigon": 40, "water": 10 }, "outputs": { "biochemical_printer": 2 }, "power": 75 },
+  
+  "ficsit_ingot": { "machine": "Konwerter", "inputs": { "caterium_ingot": 60, "ozywione_dmo": 45 }, "outputs": { "ficsit_ingot": 15 }, "power": 250 },
+  "ozywione_dmo": { "machine": "Konstruktor", "inputs": { "dmo": 120 }, "outputs": { "ozywione_dmo": 30 }, "power": 4 },
+  "ficsit_ingot_alt": { "machine": "Konwerter", "inputs": { "aluminium_ingot": 120, "ozywione_dmo": 60 }, "outputs": { "ficsit_ingot": 30 }, "power": 250 },
+  "ficsit_ingot_alt2": { "machine": "Konwerter", "inputs": { "iron_ingot": 240, "ozywione_dmo": 40}, "outputs": { "ficsit_ingot": 10 }, "power": 250 }
 }
